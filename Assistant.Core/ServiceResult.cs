@@ -22,7 +22,7 @@ namespace Assistant.Core
 
         public static ServiceResult<T> ErrorResult(string error)
         {
-            return new ServiceResult<T>(ResponseCode.Error, error, default(T));
+            return new ServiceResult<T>(ResponseCode.Error, error, default);
         }
 
         public static ServiceResult<T> SuccessResult(T entity)
@@ -32,7 +32,7 @@ namespace Assistant.Core
 
         public static ServiceResult<T> NotFoundResult(string error)
         {
-            return new ServiceResult<T>(ResponseCode.NotFound, error, default(T));
+            return new ServiceResult<T>(ResponseCode.NotFound, error, default);
         }
     }
 }

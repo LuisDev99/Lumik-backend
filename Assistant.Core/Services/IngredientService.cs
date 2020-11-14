@@ -6,7 +6,7 @@ using Assistant.Core.Interfaces;
 
 namespace Assistant.Core.Services
 {
-    public class IngredientService : BaseService<Ingredient>, IIngredient
+    public class IngredientService : BaseService<Ingredient>, IIngredientService
     {
 
         public IngredientService(IRepository<Ingredient> ingredientRepository) : base(ingredientRepository)

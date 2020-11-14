@@ -8,13 +8,14 @@ namespace Assistant.Core.Interfaces
     public interface IRepository<T>
     {
         IEnumerable<T> Get();
-        T GetById(int id);
 
-        T Insert(int id, T data);
+        T GetByID(int id);
 
-        T Update(int id, T data);
-            
-        T Delete(int id);
+        T Insert(T entity);
+
+        void Delete(T entity);
+
+        void Update(T entity);                    
 
         IEnumerable<T> Filter(Expression<Func<T, bool>> predicate);
     }

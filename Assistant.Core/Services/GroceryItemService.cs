@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Assistant.Core.Services
 {
-    public class GroceryItemService : BaseService<GroceryItem>, IGroceryItem
+    public class GroceryItemService : BaseService<GroceryItem>, IGroceryItemService
     {        
         public GroceryItemService(IRepository<GroceryItem> groceryItemRepository)
             : base(groceryItemRepository)

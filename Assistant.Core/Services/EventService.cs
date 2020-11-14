@@ -7,43 +7,11 @@ using System.Text;
 
 namespace Assistant.Core.Services
 {
-    public class EventService : BaseService<Event>, IEvent
+    public class EventService : BaseService<Event>, IEventService
     {
-        private readonly IRepository<Event> _eventRepository;
-
         public EventService(IRepository<Event> eventRepository) : base(eventRepository)
         {
-            _eventRepository = eventRepository;
         }
 
-        //public ServiceResult<Event> Delete(int id)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public ServiceResult<IEnumerable<Event>> Filter(Expression<Func<Event, bool>> predicate)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public ServiceResult<IEnumerable<Event>> Get()
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public ServiceResult<Event> GetByID(int id)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public ServiceResult<Event> Insert(int id, Event data)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public ServiceResult<Event> Update(int id, Event data)
-        //{
-        //    throw new NotImplementedException();
-        //}
     }
 }

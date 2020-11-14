@@ -13,11 +13,11 @@ namespace Assistant.Core.Interfaces
 
         public ServiceResult<T> GetByID(int id);
 
-        public ServiceResult<T> Insert(int id, T data);
+        public ServiceResult<T> Insert(T entity);        
 
-        public ServiceResult<T> Update(int id, T data);
+        public ServiceResult<T> Delete(T entity);
 
-        public ServiceResult<T> Delete(int id);
+        public ServiceResult<T> Update(T entity);
 
         public ServiceResult<IEnumerable<T>> Filter(Expression<Func<T, bool>> predicate);
     }

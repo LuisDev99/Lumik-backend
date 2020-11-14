@@ -5,8 +5,7 @@ using System.Text;
 
 namespace Assistant.Core.Interfaces
 {
-    public interface IIngredient : IBaseService<Ingredient>
+    public interface IUserService : IBaseService<User>
     {
-        
     }
 }

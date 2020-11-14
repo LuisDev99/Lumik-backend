@@ -5,7 +5,8 @@ using System.Text;
 
 namespace Assistant.Core.Interfaces
 {
-    public interface IUser : IBaseService<User>
+    public interface IGroceryListService : IBaseService<GroceryList>
     {
+        public IEnumerable<Recipe> GetSuggestedRecipes();
     }
 }

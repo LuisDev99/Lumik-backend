@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Assistant.Core.Interfaces
 {
-    public interface IGroceryItem: IBaseService<GroceryItem>
+    public interface IRecipeService : IBaseService<Recipe>
     {
         
     }

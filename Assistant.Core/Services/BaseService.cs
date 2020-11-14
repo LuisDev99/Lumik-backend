@@ -15,42 +15,36 @@ namespace Assistant.Core.Services
             _repository = repository;   
         }       
 
-        public ServiceResult<T> Delete(int id)
+        public ServiceResult<T> Delete(T entity)
         {
-            _repository.Delete(id);
-            throw new NotImplementedException();
+            _repository.Delete(entity);
+
+            return ServiceResult<T>.SuccessResult(entity);
         }
 
         public ServiceResult<IEnumerable<T>> Filter(Expression<Func<T, bool>> predicate)
         {
-            _repository.Filter(predicate);
-            throw new NotImplementedException();
+            return ServiceResult<IEnumerable<T>>.SuccessResult(_repository.Filter(predicate));
         }
 
         public ServiceResult<IEnumerable<T>> Get()
         {
-            _repository.Get();
-            throw new NotImplementedException();
+            return ServiceResult<IEnumerable<T>>.SuccessResult(_repository.Get());            
         }
 
         public ServiceResult<T> GetByID(int id)
         {
-            _repository.GetById(id);
-            throw new NotImplementedException();
+            return ServiceResult<T>.SuccessResult(_repository.GetByID(id));
         }
 
-        public ServiceResult<T> Insert(int id, T data)
+        public ServiceResult<T> Insert(T entity)
         {
-            // TODO: Get data from body
-            //_repository.Insert(data);
-            throw new NotImplementedException();
+            return ServiceResult<T>.SuccessResult(_repository.Insert(entity));
         }
 
-        public ServiceResult<T> Update(int id, T data)
+        public ServiceResult<T> Update(T entity)
         {
-            // TODO: Get data from body
-            //_repository.Update(newData);
-            throw new NotImplementedException();
+            return ServiceResult<T>.SuccessResult(entity);
         }
     }
 }
