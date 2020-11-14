@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using Assistant.Core.Entities;
 using Assistant.Core.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Assistant.Infraestructure.Repositories
 {
@@ -22,7 +23,7 @@ namespace Assistant.Infraestructure.Repositories
             return _dbContext.Set<T>().Where(predicate).ToList();
         }
 
-        public T GetById(int id)
+        public T GetByID(int id)
         {
             return _dbContext.Set<T>().FirstOrDefault(x => x.ID == id);
         }
@@ -32,31 +33,24 @@ namespace Assistant.Infraestructure.Repositories
             return _dbContext.Set<T>().ToList();
         }
 
-        public T Insert(int id, T data)
+        public T Insert(T entity)
         {
-            /**
-             * TODO: Figure out how to change the base IService in order to get the object
-             * to insert into the database
-             */
-            throw new NotImplementedException();
+            _dbContext.Add(entity);
+            _dbContext.SaveChanges();
+
+            return entity;
         }
 
-        public T Update(int id, T data)
+        public void Update(T entity)
         {
-            /**
-             * TODO: Figure out how to change the base IService in order to get the object
-             * to update into the database
-             */
-            throw new NotImplementedException();
+            _dbContext.Entry(entity).State = EntityState.Modified;
+            _dbContext.SaveChanges();            
         }
 
-        public T Delete(int id)
+        public void Delete(T entity)
         {
-            /**
-             * TODO: Figure out how to change the base IService in order to get the object
-             * to delete into the database
-             */
-            throw new NotImplementedException();
+            _dbContext.Entry(entity).State = EntityState.Deleted;
+            _dbContext.SaveChanges();
         }
     }
 }
