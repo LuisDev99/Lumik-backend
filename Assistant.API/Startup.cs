@@ -14,7 +14,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 using Assistant.Infraestructure;
-
+using Assistant.Core.Interfaces;
+using Assistant.Infraestructure.Repositories;
+using Assistant.Core.Services;
+using Assistant.Core.Entities;
 
 namespace Assistant.API
 {
@@ -34,6 +37,27 @@ namespace Assistant.API
                 x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Serialize);
             services.AddControllers();            
             services.AddDbContext<AssistantDbContext>((s, o) => o.UseSqlite("Data Source=data.db"));
+            services.AddScoped(typeof(IRepository<>), typeof(EntityFrameworkRepository<>));            
+
+
+            // Smelly way of injecting dependencies
+            //services.AddScoped<IEventService, EventService>();
+            //services.AddScoped<IGroceryItemService, GroceryItemService>();
+            //services.AddScoped<IGroceryListService, GroceryListService>();
+            //services.AddScoped<IIngredientService, IngredientService>();
+            //services.AddScoped<IRecipeService, RecipeService>();
+            //services.AddScoped<IUserService, UserService>();
+
+            services.AddScoped<IUserService, UserService>();
+
+            //services.AddScoped<IGroceryItemService, GroceryItemService>();
+            //services.AddScoped<IGroceryListService, GroceryListService>();
+            //services.AddScoped<IIngredientService, IngredientService>();
+            //services.AddScoped<IRecipeService, RecipeService>();
+            //services.AddScoped<IUserService, UserService>();
+
+            // Ideal solution
+            // services.AddScoped<IBaseService<>, BaseService<>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
