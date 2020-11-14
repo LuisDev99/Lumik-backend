@@ -2,6 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Assistant.API.Models;
+using Assistant.Core.Entities;
+using Assistant.Core.Enums;
+using Assistant.Core.Interfaces;
+using Assistant.Core.Services;
 using Assistant.Infraestructure;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,34 +17,60 @@ namespace Assistant.API.Controllers
     [ApiController]
     public class EventsController : ControllerBase
     {
-        private readonly AssistantDbContext _dbContext;
+        private readonly IEventService _eventService;
 
-        public EventsController(AssistantDbContext dbContext)
+        public EventsController(IEventService eventService)
         {
-            _dbContext = dbContext;
+            _eventService = eventService;
         }
 
         // GET: api/<EventsController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public ActionResult<IEnumerable<EventDTO>> Get()
         {
-            _dbContext.Events.Add(new Core.Entities.Event{ Title="OK", UserID=0, TriggerDate=new DateTime()});
-            _dbContext.SaveChanges();
+            var events = _eventService.Get();
 
-            return new string[] { "value1", "value2" };
+            if(events.ResponseCode == ResponseCode.NotFound)
+            {
+                return NotFound(events.Error);
+            }
+            
+            return Ok(events.Result.Select(
+                _event => new EventDTO
+                {
+                    ID = _event.ID,
+                    Title = _event.Title,
+                    TriggerDate = _event.TriggerDate,
+                    UserID = _event.UserID
+                }    
+            ));
         }
 
         // GET api/<EventsController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public ActionResult<EventDTO> Get(int id)
         {
-            return "value";
+            var _event = _eventService.GetByID(id);
+
+            if(_event.ResponseCode == ResponseCode.NotFound)
+            {
+                return NotFound(_event.Error);
+            }
+
+            return Ok(new EventDTO
+            {
+                ID = _event.Result.ID,
+                Title = _event.Result.Title,
+                TriggerDate = _event.Result.TriggerDate,
+                UserID = _event.Result.UserID
+            });            
         }
 
         // POST api/<EventsController>
         [HttpPost]
         public void Post([FromBody] string value)
         {
+
         }
 
         // PUT api/<EventsController>/5
@@ -52,6 +83,7 @@ namespace Assistant.API.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            _eventService.Delete(new Event { ID = id }); 
         }
     }
 }

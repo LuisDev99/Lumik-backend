@@ -2,6 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Assistant.API.Models;
+using Assistant.API.Models.InsertModels;
+using Assistant.Core.Entities;
+using Assistant.Core.Enums;
+using Assistant.Core.Interfaces;
+using Assistant.Core.Services;
 using Assistant.Infraestructure;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,39 +19,76 @@ namespace Assistant.API.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly AssistantDbContext _dbContext;
+        private readonly IUserService _userService;
 
-        public UsersController(AssistantDbContext dbContext)
+        public UsersController(IUserService userService)
         {
-            _dbContext = dbContext;
+            _userService = userService;
         }
 
         // GET: api/<UsersController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public ActionResult<IEnumerable<UserDTO>> Get()
         {
-            _dbContext.Users.Add(new Core.Entities.User {
-                Name = "Linus Thorvald",
-                Password = "PASSWORD IN PLAIN TEXT",
-                UserName = "Linux"                
-            });
+            var users = _userService.Get();
 
-            _dbContext.SaveChanges();
+            if(users.ResponseCode == ResponseCode.NotFound)
+            {
+                return NotFound(users.Error);
+            }            
 
-            return new string[] { "value1", "value2" };
+            return Ok(users.Result.Select(user => new UserDTO
+            {
+                ID = user.ID,
+                Name = user.Name,
+                Password = user.Password,
+                UserName = user.UserName
+            }));
         }
 
         // GET api/<UsersController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public ActionResult<UserDTO> Get(int id)
         {
-            return "value";
+            var user = _userService.GetByID(id);
+
+            if (user.ResponseCode == ResponseCode.NotFound)
+            {
+                return NotFound(user.Error);
+            }
+
+            return Ok(new UserDTO
+            {
+                ID = user.Result.ID,
+                Name = user.Result.Name,
+                Password = user.Result.Password,
+                UserName = user.Result.UserName
+            });
+
         }
 
         // POST api/<UsersController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public ActionResult<UserDTO> Post([FromBody] AddUser newUser)
         {
+            var _newUser = _userService.Insert(new User { 
+                Name = newUser.Name,
+                Password = newUser.Password,
+                UserName = newUser.UserName
+            });
+
+            if(_newUser.ResponseCode == ResponseCode.Error)
+            {
+                return BadRequest(_newUser.Error);
+            }
+
+            return Ok(new UserDTO
+            {
+                ID = _newUser.Result.ID,
+                Name = _newUser.Result.Name,
+                Password = _newUser.Result.Password,
+                UserName = _newUser.Result.UserName
+            });
         }
 
         // PUT api/<UsersController>/5
