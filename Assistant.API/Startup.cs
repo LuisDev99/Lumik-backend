@@ -37,24 +37,18 @@ namespace Assistant.API
                 x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Serialize);
             services.AddControllers();            
             services.AddDbContext<AssistantDbContext>((s, o) => o.UseSqlite("Data Source=data.db"));
-            services.AddScoped(typeof(IRepository<>), typeof(EntityFrameworkRepository<>));            
+            services.AddScoped(typeof(IRepository<>), typeof(EntityFrameworkRepository<>));
 
+            // TODO: How to register multiple implementations of the same interface in Asp.Net Core?
+            // Link: https://stackoverflow.com/questions/39174989/how-to-register-multiple-implementations-of-the-same-interface-in-asp-net-core
 
-            // Smelly way of injecting dependencies
-            //services.AddScoped<IEventService, EventService>();
-            //services.AddScoped<IGroceryItemService, GroceryItemService>();
-            //services.AddScoped<IGroceryListService, GroceryListService>();
-            //services.AddScoped<IIngredientService, IngredientService>();
-            //services.AddScoped<IRecipeService, RecipeService>();
-            //services.AddScoped<IUserService, UserService>();
-
+            // Smelly way of injecting dependencies (Possible solution in the link above)
+            services.AddScoped<IEventService, EventService>();
+            services.AddScoped<IGroceryItemService, GroceryItemService>();
+            services.AddScoped<IGroceryListService, GroceryListService>();
+            services.AddScoped<IIngredientService, IngredientService>();
+            services.AddScoped<IRecipeService, RecipeService>();
             services.AddScoped<IUserService, UserService>();
-
-            //services.AddScoped<IGroceryItemService, GroceryItemService>();
-            //services.AddScoped<IGroceryListService, GroceryListService>();
-            //services.AddScoped<IIngredientService, IngredientService>();
-            //services.AddScoped<IRecipeService, RecipeService>();
-            //services.AddScoped<IUserService, UserService>();
 
             // Ideal solution
             // services.AddScoped<IBaseService<>, BaseService<>>();
