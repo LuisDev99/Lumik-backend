@@ -17,33 +17,93 @@ namespace Assistant.Core.Services
 
         public ServiceResult<T> Delete(T entity)
         {
-            _repository.Delete(entity);
+            try
+            {
+                _repository.Delete(entity);
+
+            } catch(Exception e)
+            {
+                return ServiceResult<T>.ErrorResult(e.Message);
+            }
 
             return ServiceResult<T>.SuccessResult(entity);
         }
 
         public ServiceResult<IEnumerable<T>> Filter(Expression<Func<T, bool>> predicate)
         {
-            return ServiceResult<IEnumerable<T>>.SuccessResult(_repository.Filter(predicate));
+            IEnumerable<T> filteredResults;
+
+            try
+            {
+                filteredResults = _repository.Filter(predicate);
+
+            } catch(Exception e)
+            {
+                return ServiceResult<IEnumerable<T>>.ErrorResult(e.Message);
+            }
+
+            return ServiceResult<IEnumerable<T>>.SuccessResult(filteredResults);
         }
 
         public ServiceResult<IEnumerable<T>> Get()
         {
-            return ServiceResult<IEnumerable<T>>.SuccessResult(_repository.Get());            
+            IEnumerable<T> results;
+
+            try
+            {
+                results = _repository.Get();
+
+            } catch(Exception e)
+            {
+                return ServiceResult<IEnumerable<T>>.ErrorResult(e.Message);
+            }
+
+            return ServiceResult<IEnumerable<T>>.SuccessResult(results);            
         }
 
         public ServiceResult<T> GetByID(int id)
         {
-            return ServiceResult<T>.SuccessResult(_repository.GetByID(id));
+            T result;
+
+            try
+            {
+                result = _repository.GetByID(id);
+
+            } catch(Exception e)
+            {
+                return ServiceResult<T>.ErrorResult(e.Message);
+            }
+
+            return ServiceResult<T>.SuccessResult(result);
         }
 
-        public ServiceResult<T> Insert(T entity)
+        public virtual ServiceResult<T> Insert(T entity)
         {
-            return ServiceResult<T>.SuccessResult(_repository.Insert(entity));
+            T result;
+
+            try
+            {
+                result = _repository.Insert(entity);
+
+            } catch(Exception e)
+            {
+                return ServiceResult<T>.ErrorResult(e.Message);
+            }
+
+            return ServiceResult<T>.SuccessResult(result);
         }
 
         public ServiceResult<T> Update(T entity)
         {
+            try
+            {
+                _repository.Update(entity);
+
+            } catch(Exception e)
+            {
+                return ServiceResult<T>.ErrorResult(e.Message);
+            }
+
             return ServiceResult<T>.SuccessResult(entity);
         }
     }
