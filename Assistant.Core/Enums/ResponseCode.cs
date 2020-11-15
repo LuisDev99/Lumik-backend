@@ -8,6 +8,7 @@ namespace Assistant.Core.Enums
     {
         Success,
         Error,
+        ImATeaPot,
         NotFound
     }
 }
