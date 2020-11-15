@@ -43,6 +43,7 @@ namespace Assistant.Infraestructure.Repositories
 
         public void Update(T entity)
         {
+            _dbContext.Attach<T>(entity);
             _dbContext.Entry(entity).State = EntityState.Modified;
             _dbContext.SaveChanges();            
         }
