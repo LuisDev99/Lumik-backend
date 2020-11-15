@@ -34,5 +34,10 @@ namespace Assistant.Core
         {
             return new ServiceResult<T>(ResponseCode.NotFound, error, default);
         }
+
+        public static ServiceResult<T> PetitionDenied(string error)
+        {
+            return new ServiceResult<T>(ResponseCode.ImATeaPot, error, default);
+        }
     }
 }
