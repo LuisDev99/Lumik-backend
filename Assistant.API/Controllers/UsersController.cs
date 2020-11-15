@@ -37,6 +37,11 @@ namespace Assistant.API.Controllers
                 return NotFound(users.Error);
             }            
 
+            if(users.ResponseCode == ResponseCode.Error)
+            {
+                return BadRequest(users.Error);
+            }
+
             return Ok(users.Result.Select(user => new UserDTO
             {
                 ID = user.ID,
@@ -55,6 +60,11 @@ namespace Assistant.API.Controllers
             if (user.ResponseCode == ResponseCode.NotFound)
             {
                 return NotFound(user.Error);
+            }
+
+            if (user.ResponseCode == ResponseCode.Error)
+            {
+                return BadRequest(user.Error);
             }
 
             return Ok(new UserDTO
@@ -82,6 +92,11 @@ namespace Assistant.API.Controllers
                 return BadRequest(_newUser.Error);
             }
 
+            if(_newUser.ResponseCode == ResponseCode.ImATeaPot)
+            {
+                return StatusCode(418, _newUser.Error); // I'm A Teapot
+            }
+
             return Ok(new UserDTO
             {
                 ID = _newUser.Result.ID,
@@ -93,14 +108,60 @@ namespace Assistant.API.Controllers
 
         // PUT api/<UsersController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public ActionResult<UserDTO> Put(int id, [FromBody] AddUser newInfo)
         {
+            var _updatedUser = _userService.Update(new User
+            {
+                ID = id,
+                Name = newInfo.Name,
+                Password = newInfo.Password,
+                UserName = newInfo.UserName
+            });
+
+            if(_updatedUser.ResponseCode == ResponseCode.NotFound)
+            {
+                return NotFound(_updatedUser.Error);
+            }
+
+            if (_updatedUser.ResponseCode == ResponseCode.Error)
+            {
+                return BadRequest(_updatedUser.Error);
+            }
+
+            return Ok(new UserDTO
+            {
+                ID = _updatedUser.Result.ID,
+                Name = _updatedUser.Result.Name,
+                Password = _updatedUser.Result.Password,
+                UserName = _updatedUser.Result.UserName
+            });
+
         }
 
         // DELETE api/<UsersController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public ActionResult<UserDTO> Delete(int id)
         {
+            var deletedUser = _userService.Delete(new User { ID = id });
+            
+            if(deletedUser.ResponseCode == ResponseCode.Error)
+            {
+                return BadRequest(deletedUser.Error);
+            }
+
+            if(deletedUser.ResponseCode == ResponseCode.NotFound)
+            {
+                return NotFound(deletedUser.Error);
+            }
+
+            return Ok(new UserDTO
+            {
+                ID = id,
+                Name = deletedUser.Result.Name,
+                Password = deletedUser.Result.Password,
+                UserName = deletedUser.Result.UserName
+            });
+
         }
     }
 }
