@@ -74,6 +74,11 @@ namespace Assistant.Core.Services
                 return ServiceResult<T>.ErrorResult(e.Message);
             }
 
+            if(result == null)
+            {
+                return ServiceResult<T>.NotFoundResult("Identidad no fue encontrada");
+            }
+
             return ServiceResult<T>.SuccessResult(result);
         }
 
