@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Assistant.API.Models;
+using Assistant.API.Models.InsertModels;
 using Assistant.Core.Entities;
 using Assistant.Core.Enums;
 using Assistant.Core.Interfaces;
@@ -68,22 +69,78 @@ namespace Assistant.API.Controllers
 
         // POST api/<EventsController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public ActionResult<EventDTO> Post([FromBody] AddEvent value)
         {
+            var _event = _eventService.Insert(new Event
+            {
+                Title = value.Title,
+                UserID = value.UserID,
+                TriggerDate = value.TriggerDate,                 
+            });
 
+            if(_event.ResponseCode == ResponseCode.Error)
+            {
+                return BadRequest(_event.Error);
+            }
+
+            return Ok(new EventDTO
+            {
+                ID = _event.Result.ID,
+                Title = _event.Result.Title,
+                TriggerDate = _event.Result.TriggerDate,
+                UserID = _event.Result.UserID,
+            });
         }
 
         // PUT api/<EventsController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public ActionResult<EventDTO> Put(int id, [FromBody] AddEvent value)
         {
+            var _event = _eventService.Update(new Event
+            {
+                ID = id,
+                Title = value.Title,
+                UserID = value.UserID,
+                TriggerDate = value.TriggerDate,
+            });
+
+            if(_event.ResponseCode == ResponseCode.Error)
+            {
+                return BadRequest(_event.Error);
+            }
+
+            return Ok(new EventDTO
+            {
+                ID = id,
+                Title = value.Title,
+                UserID = value.UserID,
+                TriggerDate = value.TriggerDate,
+            });
         }
 
         // DELETE api/<EventsController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public ActionResult<EventDTO> Delete(int id)
         {
-            _eventService.Delete(new Event { ID = id }); 
+            var _event = _eventService.Delete(new Event { ID = id });
+
+            if (_event.ResponseCode == ResponseCode.Error)
+            {
+                return BadRequest(_event.Error);
+            }
+
+            if (_event.ResponseCode == ResponseCode.NotFound)
+            {
+                return NotFound(_event.Error);
+            }
+
+            return Ok(new EventDTO {
+                ID = _event.Result.ID,
+                Title = _event.Result.Title,
+                UserID = _event.Result.UserID,
+                TriggerDate = _event.Result.TriggerDate
+            });
+
         }
     }
 }
