@@ -69,7 +69,7 @@ namespace Assistant.API.Controllers
 
         // POST api/<EventsController>
         [HttpPost]
-        public ActionResult<EventDTO> Post([FromBody] AddEvent value)
+        public ActionResult Post([FromBody] AddEvent value)
         {
             var service = _eventService.Insert(new Event
             {
@@ -83,18 +83,12 @@ namespace Assistant.API.Controllers
                 return BadRequest(service.Error);
             }
 
-            return Ok(new EventDTO
-            {
-                ID = service.Result.ID,
-                Title = service.Result.Title,
-                TriggerDate = service.Result.TriggerDate,
-                UserID = service.Result.UserID,
-            });
+            return Ok();
         }
 
         // PUT api/<EventsController>/5
         [HttpPut("{id}")]
-        public ActionResult<EventDTO> Put(int id, [FromBody] AddEvent value)
+        public ActionResult Put(int id, [FromBody] AddEvent value)
         {
             var service = _eventService.Update(new Event
             {
@@ -109,18 +103,12 @@ namespace Assistant.API.Controllers
                 return BadRequest(service.Error);
             }
 
-            return Ok(new EventDTO
-            {
-                ID = id,
-                Title = value.Title,
-                UserID = value.UserID,
-                TriggerDate = value.TriggerDate,
-            });
+            return Ok();
         }
 
         // DELETE api/<EventsController>/5
         [HttpDelete("{id}")]
-        public ActionResult<EventDTO> Delete(int id)
+        public ActionResult Delete(int id)
         {
             var service = _eventService.Delete(new Event { ID = id });
 
@@ -134,12 +122,7 @@ namespace Assistant.API.Controllers
                 return NotFound(service.Error);
             }
 
-            return Ok(new EventDTO {
-                ID = service.Result.ID,
-                Title = service.Result.Title,
-                UserID = service.Result.UserID,
-                TriggerDate = service.Result.TriggerDate
-            });
+            return Ok();
 
         }
     }

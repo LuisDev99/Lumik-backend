@@ -74,7 +74,7 @@ namespace Assistant.API.Controllers
 
         // POST api/<UsersController>
         [HttpPost]
-        public ActionResult<UserDTO> Post([FromBody] AddUser newUser)
+        public ActionResult Post([FromBody] AddUser newUser)
         {
             var service = _userService.Insert(new User { 
                 Name = newUser.Name,
@@ -92,18 +92,12 @@ namespace Assistant.API.Controllers
                 return StatusCode(418, service.Error); // I'm A Teapot
             }
 
-            return Ok(new UserDTO
-            {
-                ID = service.Result.ID,
-                Name = service.Result.Name,
-                Password = service.Result.Password,
-                UserName = service.Result.UserName
-            });
+            return Ok();
         }
 
         // PUT api/<UsersController>/5
         [HttpPut("{id}")]
-        public ActionResult<UserDTO> Put(int id, [FromBody] AddUser newInfo)
+        public ActionResult Put(int id, [FromBody] AddUser newInfo)
         {
             var service = _userService.Update(new User
             {
@@ -123,19 +117,13 @@ namespace Assistant.API.Controllers
                 return BadRequest(service.Error);
             }
 
-            return Ok(new UserDTO
-            {
-                ID = service.Result.ID,
-                Name = service.Result.Name,
-                Password = service.Result.Password,
-                UserName = service.Result.UserName
-            });
+            return Ok();
 
         }
 
         // DELETE api/<UsersController>/5
         [HttpDelete("{id}")]
-        public ActionResult<UserDTO> Delete(int id)
+        public ActionResult Delete(int id)
         {
             var service = _userService.Delete(new User { ID = id });
             
@@ -149,10 +137,7 @@ namespace Assistant.API.Controllers
                 return NotFound(service.Error);
             }
 
-            return Ok(new UserDTO
-            {
-                ID = id,
-            });
+            return Ok();
         }
     }
 }

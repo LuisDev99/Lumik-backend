@@ -69,7 +69,7 @@ namespace Assistant.API.Controllers
 
         // POST api/<GroceryListsController>
         [HttpPost]
-        public ActionResult<GroceryListDTO> Post([FromBody] AddGroceryList value)
+        public ActionResult Post([FromBody] AddGroceryList value)
         {
             var service = _groceryListService.Insert(new GroceryList
             {
@@ -83,17 +83,12 @@ namespace Assistant.API.Controllers
                 return BadRequest(service.Error);
             }
 
-            return Ok(new GroceryList
-            {
-                ID = service.Result.ID,
-                Name = service.Result.Name,
-                UserID = service.Result.UserID
-            });
+            return Ok();
         }
 
         // PUT api/<GroceryListsController>/5
         [HttpPut("{id}")]
-        public ActionResult<GroceryListDTO> Put(int id, [FromBody] AddGroceryList value)
+        public ActionResult Put(int id, [FromBody] AddGroceryList value)
         {
             var service = _groceryListService.Update(new GroceryList
             {
@@ -112,17 +107,12 @@ namespace Assistant.API.Controllers
                 return NotFound(service.Error);
             }
 
-            return Ok(new GroceryListDTO
-            {
-                ID = id,
-                Name = value.Name,
-                UserID = value.UserID
-            });
+            return Ok();
         }
 
         // DELETE api/<GroceryListsController>/5
         [HttpDelete("{id}")]
-        public ActionResult<GroceryListDTO> Delete(int id)
+        public ActionResult Delete(int id)
         {
             var service = _groceryListService.Delete(new GroceryList
             {
@@ -140,10 +130,7 @@ namespace Assistant.API.Controllers
             }
 
 
-            return Ok(new GroceryListDTO
-            {
-                ID = id,
-            });
+            return Ok();
         }
     }
 }

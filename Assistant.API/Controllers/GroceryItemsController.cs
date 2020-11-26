@@ -72,7 +72,7 @@ namespace Assistant.API.Controllers
 
         // POST api/<GroceryItemsController>
         [HttpPost]
-        public ActionResult<GroceryItemDTO> Post([FromBody] AddGroceryItem value)
+        public ActionResult Post([FromBody] AddGroceryItem value)
         {
             var service = _groceryItemService.Insert(new GroceryItem
             {
@@ -86,18 +86,12 @@ namespace Assistant.API.Controllers
                 return BadRequest(service.Error);
             }
 
-            return Ok(new GroceryItemDTO
-            {
-                ID = service.Result.ID,
-                Name = service.Result.Name,
-                Count = service.Result.Count,
-                GroceryListID = service.Result.GroceryListID
-            });
+            return Ok();
         }
 
         // PUT api/<GroceryItemsController>/5
         [HttpPut("{id}")]
-        public ActionResult<GroceryItemDTO> Put(int id, [FromBody] AddGroceryItem value)
+        public ActionResult Put(int id, [FromBody] AddGroceryItem value)
         {
             var service = _groceryItemService.Update(new GroceryItem
             {
@@ -117,18 +111,12 @@ namespace Assistant.API.Controllers
                 return NotFound(service.Error);
             }
 
-            return Ok(new GroceryItemDTO
-            {
-                ID = id,
-                Name = value.Name,
-                Count = value.Count,                
-                GroceryListID = value.GroceryListID,
-            });
+            return Ok();
         }
 
         // DELETE api/<GroceryItemsController>/5
         [HttpDelete("{id}")]
-        public ActionResult<GroceryItemDTO> Delete(int id)
+        public ActionResult Delete(int id)
         {
             var service = _groceryItemService.Delete(new GroceryItem { ID = id });
 
@@ -142,10 +130,7 @@ namespace Assistant.API.Controllers
                 return NotFound(service.Error);
             }
 
-            return Ok(new GroceryItemDTO
-            {
-                ID = id
-            });
+            return Ok();
         }
     }
 }

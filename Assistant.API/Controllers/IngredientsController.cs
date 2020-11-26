@@ -69,7 +69,7 @@ namespace Assistant.API.Controllers
 
         // POST api/<IngredientsController>
         [HttpPost]
-        public ActionResult<IngredientDTO> Post([FromBody] AddIngredient value)
+        public ActionResult Post([FromBody] AddIngredient value)
         {
             var service = _ingredientService.Insert(new Ingredient
             {
@@ -82,17 +82,12 @@ namespace Assistant.API.Controllers
                 return BadRequest(service.Error);
             }
 
-            return Ok(new IngredientDTO
-            {
-                ID = service.Result.ID,
-                Name = value.Name,
-                RecipeID = value.RecipeID
-            });
+            return Ok();
         }
 
         // PUT api/<IngredientsController>/5
         [HttpPut("{id}")]
-        public ActionResult<IngredientDTO> Put(int id, [FromBody] AddIngredient value)
+        public ActionResult Put(int id, [FromBody] AddIngredient value)
         {
             var service = _ingredientService.Update(new Ingredient
             {
@@ -111,18 +106,13 @@ namespace Assistant.API.Controllers
                 return NotFound(service.Error);
             }
 
-            return Ok(new IngredientDTO
-            {
-                ID =  id,
-                Name = value.Name,
-                RecipeID = value.RecipeID
-            });
+            return Ok();
 
         }
 
         // DELETE api/<IngredientsController>/5
         [HttpDelete("{id}")]
-        public ActionResult<IngredientDTO> Delete(int id)
+        public ActionResult Delete(int id)
         {
             var service = _ingredientService.Delete(new Ingredient
             {
@@ -140,10 +130,7 @@ namespace Assistant.API.Controllers
                 return NotFound(service.Error);
             }
 
-            return Ok(new IngredientDTO
-            {
-                ID = id
-            });
+            return Ok();
         }
     }
 }
