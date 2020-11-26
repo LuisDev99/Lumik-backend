@@ -28,14 +28,14 @@ namespace Assistant.API.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<RecipeDTO>> Get()
         {
-            var _recipes = _recipeService.Get();
+            var service = _recipeService.Get();
 
-            if (_recipes.ResponseCode == ResponseCode.Error)
+            if (service.ResponseCode == ResponseCode.Error)
             {
-                return BadRequest(_recipes.Error);
+                return BadRequest(service.Error);
             }
 
-            return Ok(_recipes.Result.Select(recipe => new RecipeDTO
+            return Ok(service.Result.Select(recipe => new RecipeDTO
             {
                 ID = recipe.ID,
                 Name = recipe.Name
@@ -46,22 +46,22 @@ namespace Assistant.API.Controllers
         [HttpGet("{id}")]
         public ActionResult<RecipeDTO> Get(int id)
         {
-            var _recipe = _recipeService.GetByID(id);
+            var service = _recipeService.GetByID(id);
 
-            if (_recipe.ResponseCode == ResponseCode.Error)
+            if (service.ResponseCode == ResponseCode.Error)
             {
-                return BadRequest(_recipe.Error);
+                return BadRequest(service.Error);
             }
 
-            if(_recipe.ResponseCode == ResponseCode.NotFound)
+            if(service.ResponseCode == ResponseCode.NotFound)
             {
-                return NotFound(_recipe.Error);
+                return NotFound(service.Error);
             }
 
             return Ok(new RecipeDTO
             {
-                ID = _recipe.Result.ID,
-                Name = _recipe.Result.Name
+                ID = service.Result.ID,
+                Name = service.Result.Name
             });
         }
 
@@ -69,20 +69,20 @@ namespace Assistant.API.Controllers
         [HttpPost]
         public ActionResult<RecipeDTO> Post([FromBody] AddRecipe value)
         {
-            var _recipe = _recipeService.Insert(new Recipe
+            var service = _recipeService.Insert(new Recipe
             {
                 Name = value.Name
             });
 
-            if(_recipe.ResponseCode == ResponseCode.Error)
+            if(service.ResponseCode == ResponseCode.Error)
             {
-                return BadRequest(_recipe.Error);
+                return BadRequest(service.Error);
             }
 
             return Ok(new RecipeDTO
             {
-                ID = _recipe.Result.ID,
-                Name = _recipe.Result.Name
+                ID = service.Result.ID,
+                Name = service.Result.Name
             });
         }
 
@@ -90,26 +90,26 @@ namespace Assistant.API.Controllers
         [HttpPut("{id}")]
         public ActionResult<RecipeDTO> Put(int id, [FromBody] AddRecipe value)
         {
-            var _recipe = _recipeService.Update(new Recipe
+            var service = _recipeService.Update(new Recipe
             {
                 ID = id,
                 Name = value.Name,
             });
 
-            if(_recipe.ResponseCode == ResponseCode.Error)
+            if(service.ResponseCode == ResponseCode.Error)
             {
-                return BadRequest(_recipe.Error);
+                return BadRequest(service.Error);
             }
 
-            if (_recipe.ResponseCode == ResponseCode.NotFound)
+            if (service.ResponseCode == ResponseCode.NotFound)
             {
-                return NotFound(_recipe.Error);
+                return NotFound(service.Error);
             }
 
             return Ok(new RecipeDTO
             {
-                ID = _recipe.Result.ID,
-                Name = _recipe.Result.Name
+                ID = service.Result.ID,
+                Name = service.Result.Name
             });
         }
 
@@ -117,24 +117,24 @@ namespace Assistant.API.Controllers
         [HttpDelete("{id}")]
         public ActionResult<RecipeDTO> Delete(int id)
         {
-            var _recipe = _recipeService.Delete(new Recipe
+            var service = _recipeService.Delete(new Recipe
             {
                 ID = id,
             });
 
-            if (_recipe.ResponseCode == ResponseCode.Error)
+            if (service.ResponseCode == ResponseCode.Error)
             {
-                return BadRequest(_recipe.Error);
+                return BadRequest(service.Error);
             }
 
-            if (_recipe.ResponseCode == ResponseCode.NotFound)
+            if (service.ResponseCode == ResponseCode.NotFound)
             {
-                return NotFound(_recipe.Error);
+                return NotFound(service.Error);
             }
 
             return Ok(new RecipeDTO
             {
-                ID = _recipe.Result.ID,
+                ID = service.Result.ID,
             });
         }
     }

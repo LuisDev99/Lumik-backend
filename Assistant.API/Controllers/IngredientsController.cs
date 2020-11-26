@@ -28,14 +28,14 @@ namespace Assistant.API.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<IngredientDTO>> Get()
         {
-            var _ingredients = _ingredientService.Get();
+            var service = _ingredientService.Get();
 
-            if(_ingredients.ResponseCode == ResponseCode.Error)
+            if(service.ResponseCode == ResponseCode.Error)
             {
-                return BadRequest(_ingredients.Error);
+                return BadRequest(service.Error);
             }
 
-            return Ok(_ingredients.Result.Select(ingredient => new IngredientDTO
+            return Ok(service.Result.Select(ingredient => new IngredientDTO
             {
                 ID = ingredient.ID,
                 Name = ingredient.Name,
@@ -47,23 +47,23 @@ namespace Assistant.API.Controllers
         [HttpGet("{id}")]
         public ActionResult<IngredientDTO> Get(int id)
         {
-            var _ingredient = _ingredientService.GetByID(id);
+            var service = _ingredientService.GetByID(id);
 
-            if(_ingredient.ResponseCode == ResponseCode.Error)
+            if(service.ResponseCode == ResponseCode.Error)
             {
-                return BadRequest(_ingredient.Error);
+                return BadRequest(service.Error);
             }
 
-            if(_ingredient.ResponseCode == ResponseCode.NotFound)
+            if(service.ResponseCode == ResponseCode.NotFound)
             {
-                return NotFound(_ingredient.Error);
+                return NotFound(service.Error);
             }
 
             return Ok(new IngredientDTO
             {
-                ID =  _ingredient.Result.ID,
-                Name = _ingredient.Result.Name,
-                RecipeID = _ingredient.Result.RecipeID
+                ID =  service.Result.ID,
+                Name = service.Result.Name,
+                RecipeID = service.Result.RecipeID
             });
         }
 
@@ -71,20 +71,20 @@ namespace Assistant.API.Controllers
         [HttpPost]
         public ActionResult<IngredientDTO> Post([FromBody] AddIngredient value)
         {
-            var _ingredient = _ingredientService.Insert(new Ingredient
+            var service = _ingredientService.Insert(new Ingredient
             {
                 Name = value.Name,
                 RecipeID = value.RecipeID
             });
 
-            if(_ingredient.ResponseCode == ResponseCode.Error)
+            if(service.ResponseCode == ResponseCode.Error)
             {
-                return BadRequest(_ingredient.Error);
+                return BadRequest(service.Error);
             }
 
             return Ok(new IngredientDTO
             {
-                ID = _ingredient.Result.ID,
+                ID = service.Result.ID,
                 Name = value.Name,
                 RecipeID = value.RecipeID
             });
@@ -94,21 +94,21 @@ namespace Assistant.API.Controllers
         [HttpPut("{id}")]
         public ActionResult<IngredientDTO> Put(int id, [FromBody] AddIngredient value)
         {
-            var _ingredient = _ingredientService.Update(new Ingredient
+            var service = _ingredientService.Update(new Ingredient
             {
                 ID = id,
                 Name = value.Name,
                 RecipeID = value.RecipeID
             });
 
-            if(_ingredient.ResponseCode == ResponseCode.Error)
+            if(service.ResponseCode == ResponseCode.Error)
             {
-                return BadRequest(_ingredient.Error);
+                return BadRequest(service.Error);
             }
 
-            if(_ingredient.ResponseCode == ResponseCode.NotFound)
+            if(service.ResponseCode == ResponseCode.NotFound)
             {
-                return NotFound(_ingredient.Error);
+                return NotFound(service.Error);
             }
 
             return Ok(new IngredientDTO
@@ -124,20 +124,20 @@ namespace Assistant.API.Controllers
         [HttpDelete("{id}")]
         public ActionResult<IngredientDTO> Delete(int id)
         {
-            var _ingredient = _ingredientService.Delete(new Ingredient
+            var service = _ingredientService.Delete(new Ingredient
             {
                 ID = id
             });
 
 
-            if(_ingredient.ResponseCode == ResponseCode.Error)
+            if(service.ResponseCode == ResponseCode.Error)
             {
-                return BadRequest(_ingredient.Error);
+                return BadRequest(service.Error);
             }
 
-            if(_ingredient.ResponseCode == ResponseCode.NotFound)
+            if(service.ResponseCode == ResponseCode.NotFound)
             {
-                return NotFound(_ingredient.Error);
+                return NotFound(service.Error);
             }
 
             return Ok(new IngredientDTO

@@ -29,14 +29,14 @@ namespace Assistant.API.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<EventDTO>> Get()
         {
-            var events = _eventService.Get();
+            var service = _eventService.Get();
 
-            if(events.ResponseCode == ResponseCode.NotFound)
+            if(service.ResponseCode == ResponseCode.NotFound)
             {
-                return NotFound(events.Error);
+                return NotFound(service.Error);
             }
             
-            return Ok(events.Result.Select(
+            return Ok(service.Result.Select(
                 _event => new EventDTO
                 {
                     ID = _event.ID,
@@ -51,19 +51,19 @@ namespace Assistant.API.Controllers
         [HttpGet("{id}")]
         public ActionResult<EventDTO> Get(int id)
         {
-            var _event = _eventService.GetByID(id);
+            var service = _eventService.GetByID(id);
 
-            if(_event.ResponseCode == ResponseCode.NotFound)
+            if(service.ResponseCode == ResponseCode.NotFound)
             {
-                return NotFound(_event.Error);
+                return NotFound(service.Error);
             }
 
             return Ok(new EventDTO
             {
-                ID = _event.Result.ID,
-                Title = _event.Result.Title,
-                TriggerDate = _event.Result.TriggerDate,
-                UserID = _event.Result.UserID
+                ID = service.Result.ID,
+                Title = service.Result.Title,
+                TriggerDate = service.Result.TriggerDate,
+                UserID = service.Result.UserID
             });            
         }
 
@@ -71,24 +71,24 @@ namespace Assistant.API.Controllers
         [HttpPost]
         public ActionResult<EventDTO> Post([FromBody] AddEvent value)
         {
-            var _event = _eventService.Insert(new Event
+            var service = _eventService.Insert(new Event
             {
                 Title = value.Title,
                 UserID = value.UserID,
                 TriggerDate = value.TriggerDate,                 
             });
 
-            if(_event.ResponseCode == ResponseCode.Error)
+            if(service.ResponseCode == ResponseCode.Error)
             {
-                return BadRequest(_event.Error);
+                return BadRequest(service.Error);
             }
 
             return Ok(new EventDTO
             {
-                ID = _event.Result.ID,
-                Title = _event.Result.Title,
-                TriggerDate = _event.Result.TriggerDate,
-                UserID = _event.Result.UserID,
+                ID = service.Result.ID,
+                Title = service.Result.Title,
+                TriggerDate = service.Result.TriggerDate,
+                UserID = service.Result.UserID,
             });
         }
 
@@ -96,7 +96,7 @@ namespace Assistant.API.Controllers
         [HttpPut("{id}")]
         public ActionResult<EventDTO> Put(int id, [FromBody] AddEvent value)
         {
-            var _event = _eventService.Update(new Event
+            var service = _eventService.Update(new Event
             {
                 ID = id,
                 Title = value.Title,
@@ -104,9 +104,9 @@ namespace Assistant.API.Controllers
                 TriggerDate = value.TriggerDate,
             });
 
-            if(_event.ResponseCode == ResponseCode.Error)
+            if(service.ResponseCode == ResponseCode.Error)
             {
-                return BadRequest(_event.Error);
+                return BadRequest(service.Error);
             }
 
             return Ok(new EventDTO
@@ -122,23 +122,23 @@ namespace Assistant.API.Controllers
         [HttpDelete("{id}")]
         public ActionResult<EventDTO> Delete(int id)
         {
-            var _event = _eventService.Delete(new Event { ID = id });
+            var service = _eventService.Delete(new Event { ID = id });
 
-            if (_event.ResponseCode == ResponseCode.Error)
+            if (service.ResponseCode == ResponseCode.Error)
             {
-                return BadRequest(_event.Error);
+                return BadRequest(service.Error);
             }
 
-            if (_event.ResponseCode == ResponseCode.NotFound)
+            if (service.ResponseCode == ResponseCode.NotFound)
             {
-                return NotFound(_event.Error);
+                return NotFound(service.Error);
             }
 
             return Ok(new EventDTO {
-                ID = _event.Result.ID,
-                Title = _event.Result.Title,
-                UserID = _event.Result.UserID,
-                TriggerDate = _event.Result.TriggerDate
+                ID = service.Result.ID,
+                Title = service.Result.Title,
+                UserID = service.Result.UserID,
+                TriggerDate = service.Result.TriggerDate
             });
 
         }

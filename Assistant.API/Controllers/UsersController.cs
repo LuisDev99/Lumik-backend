@@ -30,19 +30,19 @@ namespace Assistant.API.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<UserDTO>> Get()
         {
-            var users = _userService.Get();
+            var service = _userService.Get();
 
-            if(users.ResponseCode == ResponseCode.NotFound)
+            if(service.ResponseCode == ResponseCode.NotFound)
             {
-                return NotFound(users.Error);
+                return NotFound(service.Error);
             }            
 
-            if(users.ResponseCode == ResponseCode.Error)
+            if(service.ResponseCode == ResponseCode.Error)
             {
-                return BadRequest(users.Error);
+                return BadRequest(service.Error);
             }
 
-            return Ok(users.Result.Select(user => new UserDTO
+            return Ok(service.Result.Select(user => new UserDTO
             {
                 ID = user.ID,
                 Name = user.Name,
@@ -55,24 +55,24 @@ namespace Assistant.API.Controllers
         [HttpGet("{id}")]
         public ActionResult<UserDTO> Get(int id)
         {
-            var user = _userService.GetByID(id);
+            var service = _userService.GetByID(id);
 
-            if (user.ResponseCode == ResponseCode.NotFound)
+            if (service.ResponseCode == ResponseCode.NotFound)
             {
-                return NotFound(user.Error);
+                return NotFound(service.Error);
             }
 
-            if (user.ResponseCode == ResponseCode.Error)
+            if (service.ResponseCode == ResponseCode.Error)
             {
-                return BadRequest(user.Error);
+                return BadRequest(service.Error);
             }
 
             return Ok(new UserDTO
             {
-                ID = user.Result.ID,
-                Name = user.Result.Name,
-                Password = user.Result.Password,
-                UserName = user.Result.UserName
+                ID = service.Result.ID,
+                Name = service.Result.Name,
+                Password = service.Result.Password,
+                UserName = service.Result.UserName
             });
 
         }
@@ -81,28 +81,28 @@ namespace Assistant.API.Controllers
         [HttpPost]
         public ActionResult<UserDTO> Post([FromBody] AddUser newUser)
         {
-            var _newUser = _userService.Insert(new User { 
+            var service = _userService.Insert(new User { 
                 Name = newUser.Name,
                 Password = newUser.Password,
                 UserName = newUser.UserName
             });
 
-            if(_newUser.ResponseCode == ResponseCode.Error)
+            if(service.ResponseCode == ResponseCode.Error)
             {
-                return BadRequest(_newUser.Error);
+                return BadRequest(service.Error);
             }
 
-            if(_newUser.ResponseCode == ResponseCode.ImATeaPot)
+            if(service.ResponseCode == ResponseCode.ImATeaPot)
             {
-                return StatusCode(418, _newUser.Error); // I'm A Teapot
+                return StatusCode(418, service.Error); // I'm A Teapot
             }
 
             return Ok(new UserDTO
             {
-                ID = _newUser.Result.ID,
-                Name = _newUser.Result.Name,
-                Password = _newUser.Result.Password,
-                UserName = _newUser.Result.UserName
+                ID = service.Result.ID,
+                Name = service.Result.Name,
+                Password = service.Result.Password,
+                UserName = service.Result.UserName
             });
         }
 
@@ -110,7 +110,7 @@ namespace Assistant.API.Controllers
         [HttpPut("{id}")]
         public ActionResult<UserDTO> Put(int id, [FromBody] AddUser newInfo)
         {
-            var _updatedUser = _userService.Update(new User
+            var service = _userService.Update(new User
             {
                 ID = id,
                 Name = newInfo.Name,
@@ -118,22 +118,22 @@ namespace Assistant.API.Controllers
                 UserName = newInfo.UserName
             });
 
-            if(_updatedUser.ResponseCode == ResponseCode.NotFound)
+            if(service.ResponseCode == ResponseCode.NotFound)
             {
-                return NotFound(_updatedUser.Error);
+                return NotFound(service.Error);
             }
 
-            if (_updatedUser.ResponseCode == ResponseCode.Error)
+            if (service.ResponseCode == ResponseCode.Error)
             {
-                return BadRequest(_updatedUser.Error);
+                return BadRequest(service.Error);
             }
 
             return Ok(new UserDTO
             {
-                ID = _updatedUser.Result.ID,
-                Name = _updatedUser.Result.Name,
-                Password = _updatedUser.Result.Password,
-                UserName = _updatedUser.Result.UserName
+                ID = service.Result.ID,
+                Name = service.Result.Name,
+                Password = service.Result.Password,
+                UserName = service.Result.UserName
             });
 
         }
@@ -142,26 +142,22 @@ namespace Assistant.API.Controllers
         [HttpDelete("{id}")]
         public ActionResult<UserDTO> Delete(int id)
         {
-            var deletedUser = _userService.Delete(new User { ID = id });
+            var service = _userService.Delete(new User { ID = id });
             
-            if(deletedUser.ResponseCode == ResponseCode.Error)
+            if(service.ResponseCode == ResponseCode.Error)
             {
-                return BadRequest(deletedUser.Error);
+                return BadRequest(service.Error);
             }
 
-            if(deletedUser.ResponseCode == ResponseCode.NotFound)
+            if(service.ResponseCode == ResponseCode.NotFound)
             {
-                return NotFound(deletedUser.Error);
+                return NotFound(service.Error);
             }
 
             return Ok(new UserDTO
             {
                 ID = id,
-                Name = deletedUser.Result.Name,
-                Password = deletedUser.Result.Password,
-                UserName = deletedUser.Result.UserName
             });
-
         }
     }
 }

@@ -28,19 +28,19 @@ namespace Assistant.API.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<GroceryItemDTO>> Get()
         {
-            var _groceryItems = _groceryItemService.Get();
+            var service = _groceryItemService.Get();
 
-            if (_groceryItems.ResponseCode == ResponseCode.Error)
+            if (service.ResponseCode == ResponseCode.Error)
             {
-                return BadRequest(_groceryItems.Result);
+                return BadRequest(service.Result);
             }
 
-            return Ok(_groceryItems.Result.Select(item => new GroceryItemDTO
+            return Ok(service.Result.Select(groceryItem => new GroceryItemDTO
             {
-                ID = item.ID,
-                Name = item.Name,
-                Count = item.Count,
-                GroceryListID = item.GroceryListID
+                ID = groceryItem.ID,
+                Name = groceryItem.Name,
+                Count = groceryItem.Count,
+                GroceryListID = groceryItem.GroceryListID
             }));
         }
 
@@ -48,24 +48,24 @@ namespace Assistant.API.Controllers
         [HttpGet("{id}")]
         public ActionResult<GroceryItemDTO> Get(int id)
         {
-            var _groceryItem = _groceryItemService.GetByID(id);
+            var service = _groceryItemService.GetByID(id);
 
-            if(_groceryItem.ResponseCode == ResponseCode.NotFound)
+            if(service.ResponseCode == ResponseCode.NotFound)
             {
-                return NotFound(_groceryItem.Error);
+                return NotFound(service.Error);
             }
 
-            if (_groceryItem.ResponseCode == ResponseCode.Error)
+            if (service.ResponseCode == ResponseCode.Error)
             {
-                return BadRequest(_groceryItem.Error);
+                return BadRequest(service.Error);
             }
 
             return Ok(new GroceryItemDTO
             {
-                ID = _groceryItem.Result.ID,
-                Name = _groceryItem.Result.Name,
-                Count = _groceryItem.Result.Count,                
-                GroceryListID = _groceryItem.Result.GroceryListID
+                ID = service.Result.ID,
+                Name = service.Result.Name,
+                Count = service.Result.Count,                
+                GroceryListID = service.Result.GroceryListID
             });
 
         }
@@ -74,24 +74,24 @@ namespace Assistant.API.Controllers
         [HttpPost]
         public ActionResult<GroceryItemDTO> Post([FromBody] AddGroceryItem value)
         {
-            var _groceryItem = _groceryItemService.Insert(new GroceryItem
+            var service = _groceryItemService.Insert(new GroceryItem
             {
                 Name = value.Name,
                 Count = value.Count,
                 GroceryListID = value.GroceryListID,
             });
 
-            if(_groceryItem.ResponseCode == ResponseCode.Error)
+            if(service.ResponseCode == ResponseCode.Error)
             {
-                return BadRequest(_groceryItem.Error);
+                return BadRequest(service.Error);
             }
 
             return Ok(new GroceryItemDTO
             {
-                ID = _groceryItem.Result.ID,
-                Name = _groceryItem.Result.Name,
-                Count = _groceryItem.Result.Count,
-                GroceryListID = _groceryItem.Result.GroceryListID
+                ID = service.Result.ID,
+                Name = service.Result.Name,
+                Count = service.Result.Count,
+                GroceryListID = service.Result.GroceryListID
             });
         }
 
@@ -99,7 +99,7 @@ namespace Assistant.API.Controllers
         [HttpPut("{id}")]
         public ActionResult<GroceryItemDTO> Put(int id, [FromBody] AddGroceryItem value)
         {
-            var _groceryItem = _groceryItemService.Update(new GroceryItem
+            var service = _groceryItemService.Update(new GroceryItem
             {
                 ID = id,
                 Name = value.Name,
@@ -107,14 +107,14 @@ namespace Assistant.API.Controllers
                 GroceryListID = value.GroceryListID
             });
 
-            if(_groceryItem.ResponseCode == ResponseCode.Error)
+            if(service.ResponseCode == ResponseCode.Error)
             {
-                return BadRequest(_groceryItem.Error);
+                return BadRequest(service.Error);
             }
 
-            if (_groceryItem.ResponseCode == ResponseCode.NotFound)
+            if (service.ResponseCode == ResponseCode.NotFound)
             {
-                return NotFound(_groceryItem.Error);
+                return NotFound(service.Error);
             }
 
             return Ok(new GroceryItemDTO
@@ -130,16 +130,16 @@ namespace Assistant.API.Controllers
         [HttpDelete("{id}")]
         public ActionResult<GroceryItemDTO> Delete(int id)
         {
-            var _groceryItem = _groceryItemService.Delete(new GroceryItem { ID = id });
+            var service = _groceryItemService.Delete(new GroceryItem { ID = id });
 
-            if (_groceryItem.ResponseCode == ResponseCode.Error)
+            if (service.ResponseCode == ResponseCode.Error)
             {
-                return BadRequest(_groceryItem.Error);
+                return BadRequest(service.Error);
             }
 
-            if (_groceryItem.ResponseCode == ResponseCode.NotFound)
+            if (service.ResponseCode == ResponseCode.NotFound)
             {
-                return NotFound(_groceryItem.Error);
+                return NotFound(service.Error);
             }
 
             return Ok(new GroceryItemDTO

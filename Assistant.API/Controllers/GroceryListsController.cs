@@ -28,19 +28,19 @@ namespace Assistant.API.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<GroceryListDTO>> Get()
         {
-            var _groceryLists = _groceryListService.Get();
+            var service = _groceryListService.Get();
 
-            if(_groceryLists.ResponseCode == ResponseCode.Error)
+            if(service.ResponseCode == ResponseCode.Error)
             {
-                return BadRequest(_groceryLists.Error);
+                return BadRequest(service.Error);
             }
 
-            if(_groceryLists.ResponseCode == ResponseCode.NotFound)
+            if(service.ResponseCode == ResponseCode.NotFound)
             {
-                return NotFound(_groceryLists.Error);
+                return NotFound(service.Error);
             }
 
-            return Ok(_groceryLists.Result.Select(groceryList => new GroceryListDTO { 
+            return Ok(service.Result.Select(groceryList => new GroceryListDTO { 
                 ID = groceryList.ID,
                 Name = groceryList.Name,
                 UserID = groceryList.UserID
@@ -51,23 +51,23 @@ namespace Assistant.API.Controllers
         [HttpGet("{id}")]
         public ActionResult<GroceryListDTO> Get(int id)
         {
-            var _groceryList = _groceryListService.GetByID(id);
+            var service = _groceryListService.GetByID(id);
 
-            if(_groceryList.ResponseCode == ResponseCode.Error)
+            if(service.ResponseCode == ResponseCode.Error)
             {
-                return BadRequest(_groceryList.Error);
+                return BadRequest(service.Error);
             }
 
-            if (_groceryList.ResponseCode == ResponseCode.Error)
+            if (service.ResponseCode == ResponseCode.Error)
             {
-                return BadRequest(_groceryList.Error);
+                return BadRequest(service.Error);
             }
 
             return Ok(new GroceryListDTO
             {
-                ID = _groceryList.Result.ID,
-                Name = _groceryList.Result.Name,
-                UserID = _groceryList.Result.UserID
+                ID = service.Result.ID,
+                Name = service.Result.Name,
+                UserID = service.Result.UserID
             });
 
         }
@@ -76,23 +76,23 @@ namespace Assistant.API.Controllers
         [HttpPost]
         public ActionResult<GroceryListDTO> Post([FromBody] AddGroceryList value)
         {
-            var _groceryList = _groceryListService.Insert(new GroceryList
+            var service = _groceryListService.Insert(new GroceryList
             {
                 Name = value.Name,
                 UserID = value.UserID                
             });
 
 
-            if(_groceryList.ResponseCode == ResponseCode.Error)
+            if(service.ResponseCode == ResponseCode.Error)
             {
-                return BadRequest(_groceryList.Error);
+                return BadRequest(service.Error);
             }
 
             return Ok(new GroceryList
             {
-                ID = _groceryList.Result.ID,
-                Name = _groceryList.Result.Name,
-                UserID = _groceryList.Result.UserID
+                ID = service.Result.ID,
+                Name = service.Result.Name,
+                UserID = service.Result.UserID
             });
         }
 
@@ -100,21 +100,21 @@ namespace Assistant.API.Controllers
         [HttpPut("{id}")]
         public ActionResult<GroceryListDTO> Put(int id, [FromBody] AddGroceryList value)
         {
-            var _groceryList = _groceryListService.Update(new GroceryList
+            var service = _groceryListService.Update(new GroceryList
             {
                 ID = id,
                 Name = value.Name,
                 UserID = value.UserID,                
             });
 
-            if(_groceryList.ResponseCode == ResponseCode.Error)
+            if(service.ResponseCode == ResponseCode.Error)
             {
-                return BadRequest(_groceryList.Error);
+                return BadRequest(service.Error);
             }
 
-            if (_groceryList.ResponseCode == ResponseCode.NotFound)
+            if (service.ResponseCode == ResponseCode.NotFound)
             {
-                return NotFound(_groceryList.Error);
+                return NotFound(service.Error);
             }
 
             return Ok(new GroceryListDTO
@@ -129,19 +129,19 @@ namespace Assistant.API.Controllers
         [HttpDelete("{id}")]
         public ActionResult<GroceryListDTO> Delete(int id)
         {
-            var _groceryList = _groceryListService.Delete(new GroceryList
+            var service = _groceryListService.Delete(new GroceryList
             {
                 ID = id,
             });
 
-            if(_groceryList.ResponseCode == ResponseCode.Error)
+            if(service.ResponseCode == ResponseCode.Error)
             {
-                return BadRequest(_groceryList.Error);
+                return BadRequest(service.Error);
             }
 
-            if(_groceryList.ResponseCode == ResponseCode.NotFound)
+            if(service.ResponseCode == ResponseCode.NotFound)
             {
-                return NotFound(_groceryList.Error);
+                return NotFound(service.Error);
             }
 
 
