@@ -119,7 +119,6 @@ namespace Assistant.API.Controllers
                 ID = id
             });
 
-
             if(service.ResponseCode == ResponseCode.Error)
             {
                 return BadRequest(service.Error);

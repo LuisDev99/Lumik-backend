@@ -53,7 +53,12 @@ namespace Assistant.API.Controllers
         {
             var service = _eventService.GetByID(id);
 
-            if(service.ResponseCode == ResponseCode.NotFound)
+            if (service.ResponseCode == ResponseCode.Error)
+            {
+                return BadRequest(service.Error);
+            }
+
+            if (service.ResponseCode == ResponseCode.NotFound)
             {
                 return NotFound(service.Error);
             }
@@ -101,6 +106,11 @@ namespace Assistant.API.Controllers
             if(service.ResponseCode == ResponseCode.Error)
             {
                 return BadRequest(service.Error);
+            }
+
+            if (service.ResponseCode == ResponseCode.NotFound)
+            {
+                return NotFound(service.Error);
             }
 
             return Ok();

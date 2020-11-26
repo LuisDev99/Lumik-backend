@@ -53,9 +53,9 @@ namespace Assistant.API.Controllers
                 return BadRequest(service.Error);
             }
 
-            if (service.ResponseCode == ResponseCode.Error)
+            if (service.ResponseCode == ResponseCode.NotFound)
             {
-                return BadRequest(service.Error);
+                return NotFound(service.Error);
             }
 
             return Ok(new GroceryListDTO
@@ -76,7 +76,6 @@ namespace Assistant.API.Controllers
                 Name = value.Name,
                 UserID = value.UserID                
             });
-
 
             if(service.ResponseCode == ResponseCode.Error)
             {
@@ -128,7 +127,6 @@ namespace Assistant.API.Controllers
             {
                 return NotFound(service.Error);
             }
-
 
             return Ok();
         }

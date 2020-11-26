@@ -52,14 +52,14 @@ namespace Assistant.API.Controllers
         {
             var service = _userService.GetByID(id);
 
-            if (service.ResponseCode == ResponseCode.NotFound)
-            {
-                return NotFound(service.Error);
-            }
-
             if (service.ResponseCode == ResponseCode.Error)
             {
                 return BadRequest(service.Error);
+            }
+
+            if (service.ResponseCode == ResponseCode.NotFound)
+            {
+                return NotFound(service.Error);
             }
 
             return Ok(new UserDTO
@@ -89,7 +89,7 @@ namespace Assistant.API.Controllers
 
             if(service.ResponseCode == ResponseCode.ImATeaPot)
             {
-                return StatusCode(418, service.Error); // I'm A Teapot
+                return StatusCode(418, service.Error); // I'm A Teapot (Handle if the username already exists)
             }
 
             return Ok();
@@ -107,14 +107,14 @@ namespace Assistant.API.Controllers
                 UserName = newInfo.UserName
             });
 
-            if(service.ResponseCode == ResponseCode.NotFound)
-            {
-                return NotFound(service.Error);
-            }
-
             if (service.ResponseCode == ResponseCode.Error)
             {
                 return BadRequest(service.Error);
+            }
+
+            if (service.ResponseCode == ResponseCode.NotFound)
+            {
+                return NotFound(service.Error);
             }
 
             return Ok();

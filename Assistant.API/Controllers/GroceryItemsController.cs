@@ -48,16 +48,16 @@ namespace Assistant.API.Controllers
         [HttpGet("{id}")]
         public ActionResult<GroceryItemDTO> Get(int id)
         {
-            var service = _groceryItemService.GetByID(id);
-
-            if(service.ResponseCode == ResponseCode.NotFound)
-            {
-                return NotFound(service.Error);
-            }
+            var service = _groceryItemService.GetByID(id);            
 
             if (service.ResponseCode == ResponseCode.Error)
             {
                 return BadRequest(service.Error);
+            }
+
+            if (service.ResponseCode == ResponseCode.NotFound)
+            {
+                return NotFound(service.Error);
             }
 
             return Ok(new GroceryItemDTO
