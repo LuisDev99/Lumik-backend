@@ -30,12 +30,7 @@ namespace Assistant.API.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<UserDTO>> Get()
         {
-            var service = _userService.Get();
-
-            if(service.ResponseCode == ResponseCode.NotFound)
-            {
-                return NotFound(service.Error);
-            }            
+            var service = _userService.Get();                        
 
             if(service.ResponseCode == ResponseCode.Error)
             {

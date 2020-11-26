@@ -35,11 +35,6 @@ namespace Assistant.API.Controllers
                 return BadRequest(service.Error);
             }
 
-            if(service.ResponseCode == ResponseCode.NotFound)
-            {
-                return NotFound(service.Error);
-            }
-
             return Ok(service.Result.Select(groceryList => new GroceryListDTO { 
                 ID = groceryList.ID,
                 Name = groceryList.Name,

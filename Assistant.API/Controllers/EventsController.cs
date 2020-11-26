@@ -31,9 +31,9 @@ namespace Assistant.API.Controllers
         {
             var service = _eventService.Get();
 
-            if(service.ResponseCode == ResponseCode.NotFound)
+            if(service.ResponseCode == ResponseCode.Error)
             {
-                return NotFound(service.Error);
+                return BadRequest(service.Error);
             }
             
             return Ok(service.Result.Select(
