@@ -26,7 +26,7 @@ namespace Assistant.API.Controllers
         }
 
         // GET: api/<EventsController>
-        [HttpGet]
+        [HttpGet(Name = "GetEvents")]
         public ActionResult<IEnumerable<EventDTO>> Get()
         {
             var service = _eventService.Get();
@@ -48,7 +48,7 @@ namespace Assistant.API.Controllers
         }
 
         // GET api/<EventsController>/5
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetEvent")]
         public ActionResult<EventDTO> Get(int id)
         {
             var service = _eventService.GetByID(id);
@@ -73,7 +73,7 @@ namespace Assistant.API.Controllers
         }
 
         // POST api/<EventsController>
-        [HttpPost]
+        [HttpPost(Name = "CreateEvent")]
         public ActionResult Post([FromBody] AddEvent value)
         {
             var service = _eventService.Insert(new Event
@@ -92,7 +92,7 @@ namespace Assistant.API.Controllers
         }
 
         // PUT api/<EventsController>/5
-        [HttpPut("{id}")]
+        [HttpPut("{id}", Name = "UpdateEvent")]
         public ActionResult Put(int id, [FromBody] AddEvent value)
         {
             var service = _eventService.Update(new Event
@@ -117,7 +117,7 @@ namespace Assistant.API.Controllers
         }
 
         // DELETE api/<EventsController>/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}", Name ="DeleteEvent")]
         public ActionResult Delete(int id)
         {
             var service = _eventService.Delete(new Event { ID = id });

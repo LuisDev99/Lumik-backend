@@ -25,7 +25,7 @@ namespace Assistant.API.Controllers
         }
 
         // GET: api/<GroceryItemsController>
-        [HttpGet]
+        [HttpGet(Name = "GetGroceryItems")]
         public ActionResult<IEnumerable<GroceryItemDTO>> Get()
         {
             var service = _groceryItemService.Get();
@@ -45,7 +45,7 @@ namespace Assistant.API.Controllers
         }
 
         // GET api/<GroceryItemsController>/5
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetGroceryItem")]
         public ActionResult<GroceryItemDTO> Get(int id)
         {
             var service = _groceryItemService.GetByID(id);            
@@ -71,7 +71,7 @@ namespace Assistant.API.Controllers
         }
 
         // POST api/<GroceryItemsController>
-        [HttpPost]
+        [HttpPost(Name = "AddGroceryItem")]
         public ActionResult Post([FromBody] AddGroceryItem value)
         {
             var service = _groceryItemService.Insert(new GroceryItem
@@ -90,7 +90,7 @@ namespace Assistant.API.Controllers
         }
 
         // PUT api/<GroceryItemsController>/5
-        [HttpPut("{id}")]
+        [HttpPut("{id}", Name = "UpdateGroceryItem")]
         public ActionResult Put(int id, [FromBody] AddGroceryItem value)
         {
             var service = _groceryItemService.Update(new GroceryItem
@@ -115,7 +115,7 @@ namespace Assistant.API.Controllers
         }
 
         // DELETE api/<GroceryItemsController>/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}", Name = "DeleteGroceryItem")]
         public ActionResult Delete(int id)
         {
             var service = _groceryItemService.Delete(new GroceryItem { ID = id });

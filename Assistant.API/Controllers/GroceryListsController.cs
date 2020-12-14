@@ -25,7 +25,7 @@ namespace Assistant.API.Controllers
         }
 
         // GET: api/<GroceryListsController>
-        [HttpGet]
+        [HttpGet(Name = "GetGroceryLists")]
         public ActionResult<IEnumerable<GroceryListDTO>> Get()
         {
             var service = _groceryListService.Get();
@@ -40,15 +40,15 @@ namespace Assistant.API.Controllers
                 Name = groceryList.Name,
                 UserID = groceryList.UserID
             }));            
-        }
+        }       
 
         // GET api/<GroceryListsController>/5
-        [HttpGet("{id}")]
-        public ActionResult<GroceryListDTO> Get(int id)
+        [HttpGet("items", Name = "GetGroceryListByName")]
+        public ActionResult<GroceryListDTO> Get([FromQuery] string name)
         {
-            var service = _groceryListService.GetByID(id);
+            var service = _groceryListService.GetGroceryListByName(name);
 
-            if(service.ResponseCode == ResponseCode.Error)
+            if (service.ResponseCode == ResponseCode.Error)
             {
                 return BadRequest(service.Error);
             }
@@ -62,13 +62,19 @@ namespace Assistant.API.Controllers
             {
                 ID = service.Result.ID,
                 Name = service.Result.Name,
-                UserID = service.Result.UserID
-            });
-
+                UserID = service.Result.UserID,
+                GroceryItems = service.Result.GroceryItems.Select(item => new GroceryItemDTO
+                {
+                    ID = item.ID,
+                    Name = item.Name,
+                    Count = item.Count,
+                    GroceryListID = item.GroceryListID,
+                })
+            }); 
         }
 
         // POST api/<GroceryListsController>
-        [HttpPost]
+        [HttpPost(Name = "CreateGroceryList")]
         public ActionResult Post([FromBody] AddGroceryList value)
         {
             var service = _groceryListService.Insert(new GroceryList
@@ -86,7 +92,7 @@ namespace Assistant.API.Controllers
         }
 
         // PUT api/<GroceryListsController>/5
-        [HttpPut("{id}")]
+        [HttpPut("{id}", Name = "UpdateGroceryList")]
         public ActionResult Put(int id, [FromBody] AddGroceryList value)
         {
             var service = _groceryListService.Update(new GroceryList
@@ -110,7 +116,7 @@ namespace Assistant.API.Controllers
         }
 
         // DELETE api/<GroceryListsController>/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}", Name = "DeleteGroceryList")]
         public ActionResult Delete(int id)
         {
             var service = _groceryListService.Delete(new GroceryList
