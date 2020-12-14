@@ -18,6 +18,8 @@ using Assistant.Core.Interfaces;
 using Assistant.Infraestructure.Repositories;
 using Assistant.Core.Services;
 using Assistant.Core.Entities;
+using Microsoft.OpenApi.Models;
+using Assistant.Core.Interfaces.Repositories;
 
 namespace Assistant.API
 {
@@ -39,19 +41,19 @@ namespace Assistant.API
             services.AddDbContext<AssistantDbContext>((s, o) => o.UseSqlite("Data Source=data.db"));
             services.AddScoped(typeof(IRepository<>), typeof(EntityFrameworkRepository<>));
 
-            // TODO: How to register multiple implementations of the same interface in Asp.Net Core?
-            // Link: https://stackoverflow.com/questions/39174989/how-to-register-multiple-implementations-of-the-same-interface-in-asp-net-core
-
-            // Smelly way of injecting dependencies (Possible solution in the link above)
-            services.AddScoped<IEventService, EventService>();
-            services.AddScoped<IGroceryItemService, GroceryItemService>();
+            // Smelly way of injecting dependencies            
+            services.AddScoped<IGroceryListRepository, GroceryListRepository>();
             services.AddScoped<IGroceryListService, GroceryListService>();
+            services.AddScoped<IGroceryItemService, GroceryItemService>();
             services.AddScoped<IIngredientService, IngredientService>();
             services.AddScoped<IRecipeService, RecipeService>();
+            services.AddScoped<IEventService, EventService>();
             services.AddScoped<IUserService, UserService>();
 
-            // Ideal solution
-            // services.AddScoped<IBaseService<>, BaseService<>>();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Assistant.API", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,6 +62,8 @@ namespace Assistant.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Assistant.API v1"));
             }
 
             app.UseHttpsRedirection();
