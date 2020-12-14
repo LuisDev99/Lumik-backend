@@ -11,7 +11,7 @@ namespace Assistant.Infraestructure.Repositories
 {
     public class EntityFrameworkRepository<T> : IRepository<T> where T : BaseEntity
     {
-        private readonly AssistantDbContext _dbContext;
+        protected readonly AssistantDbContext _dbContext;
 
         public EntityFrameworkRepository(AssistantDbContext dbContext)
         {
@@ -26,6 +26,11 @@ namespace Assistant.Infraestructure.Repositories
         public T GetByID(int id)
         {
             return _dbContext.Set<T>().FirstOrDefault(x => x.ID == id);
+        }
+
+        public T GetByCondition(Expression<Func<T, bool>> predicate)
+        {
+            return _dbContext.Set<T>().FirstOrDefault(predicate);
         }
 
         public IEnumerable<T> Get()

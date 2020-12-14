@@ -10,10 +10,10 @@ namespace Assistant.Core.Services
     {
         protected readonly IRepository<T> _repository;
 
-        public BaseService(IRepository<T> repository) 
+        public BaseService(IRepository<T> repository)
         {
-            _repository = repository;   
-        }       
+            _repository = repository;
+        }
 
         public ServiceResult<T> Delete(T entity)
         {
@@ -21,7 +21,8 @@ namespace Assistant.Core.Services
             {
                 _repository.Delete(entity);
 
-            } catch(Exception e)
+            }
+            catch (Exception e)
             {
                 return ServiceResult<T>.ErrorResult(e.Message);
             }
@@ -37,7 +38,8 @@ namespace Assistant.Core.Services
             {
                 filteredResults = _repository.Filter(predicate);
 
-            } catch(Exception e)
+            }
+            catch (Exception e)
             {
                 return ServiceResult<IEnumerable<T>>.ErrorResult(e.Message);
             }
@@ -53,12 +55,13 @@ namespace Assistant.Core.Services
             {
                 results = _repository.Get();
 
-            } catch(Exception e)
+            }
+            catch (Exception e)
             {
                 return ServiceResult<IEnumerable<T>>.ErrorResult(e.Message);
             }
 
-            return ServiceResult<IEnumerable<T>>.SuccessResult(results);            
+            return ServiceResult<IEnumerable<T>>.SuccessResult(results);
         }
 
         public ServiceResult<T> GetByID(int id)
@@ -69,12 +72,35 @@ namespace Assistant.Core.Services
             {
                 result = _repository.GetByID(id);
 
-            } catch(Exception e)
+            }
+            catch (Exception e)
             {
                 return ServiceResult<T>.ErrorResult(e.Message);
             }
 
-            if(result == null)
+            if (result == null)
+            {
+                return ServiceResult<T>.NotFoundResult("Identidad no fue encontrada");
+            }
+
+            return ServiceResult<T>.SuccessResult(result);
+        }
+
+        public ServiceResult<T> GetByCondition(Expression<Func<T, bool>> predicate)
+        {
+            T result;
+
+            try
+            {
+                result = _repository.GetByCondition(predicate);
+
+            }
+            catch (Exception e)
+            {
+                return ServiceResult<T>.ErrorResult(e.Message);
+            }
+
+            if (result == null)
             {
                 return ServiceResult<T>.NotFoundResult("Identidad no fue encontrada");
             }
@@ -90,7 +116,8 @@ namespace Assistant.Core.Services
             {
                 result = _repository.Insert(entity);
 
-            } catch(Exception e)
+            }
+            catch (Exception e)
             {
                 return ServiceResult<T>.ErrorResult(e.Message);
             }
@@ -104,7 +131,8 @@ namespace Assistant.Core.Services
             {
                 _repository.Update(entity);
 
-            } catch(Exception e)
+            }
+            catch (Exception e)
             {
                 return ServiceResult<T>.ErrorResult(e.Message);
             }

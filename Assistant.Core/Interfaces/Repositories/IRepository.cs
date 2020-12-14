@@ -11,6 +11,8 @@ namespace Assistant.Core.Interfaces
 
         T GetByID(int id);
 
+        T GetByCondition(Expression<Func<T, bool>> predicate);
+
         T Insert(T entity);
 
         void Delete(T entity);

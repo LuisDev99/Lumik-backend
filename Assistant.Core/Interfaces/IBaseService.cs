@@ -13,6 +13,8 @@ namespace Assistant.Core.Interfaces
 
         public ServiceResult<T> GetByID(int id);
 
+        public ServiceResult<T> GetByCondition(Expression<Func<T, bool>> predicate);
+
         public ServiceResult<T> Insert(T entity);        
 
         public ServiceResult<T> Delete(T entity);
