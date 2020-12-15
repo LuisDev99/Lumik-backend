@@ -7,8 +7,12 @@ namespace Assistant.Core.Interfaces
 {
     public interface IGroceryListService : IBaseService<GroceryList>
     {
-        public ServiceResult<GroceryList> GetGroceryListByName(string name);
+        ServiceResult<IEnumerable<Recipe>> GetSuggestedRecipes();
 
-        public ServiceResult<IEnumerable<Recipe>> GetSuggestedRecipes();
+        ServiceResult<GroceryList> GetGroceryListByName(string name);
+
+        ServiceResult<GroceryItem> GetGroceryListItemByName(int groceryListID, string itemName);
+
+        ServiceResult<IEnumerable<GroceryItem>> GetGroceryListItems(int groceryListID);
     }
 }

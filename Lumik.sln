@@ -26,7 +26,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Chat", "Chat", "{FC03B43F-6
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chat.Core", "Chat.Core\Chat.Core.csproj", "{7374DB47-232E-4631-BB53-DFE08EF7EE9E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chat.BotInfrastucture", "Chat.BotInfrastucture\Chat.BotInfrastucture.csproj", "{CD33B810-11DE-4B86-918F-B8A3BAA202EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chat.BotInfrastucture", "Chat.BotInfrastucture\Chat.BotInfrastucture.csproj", "{CD33B810-11DE-4B86-918F-B8A3BAA202EC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

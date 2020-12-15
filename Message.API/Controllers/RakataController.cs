@@ -1,4 +1,5 @@
-﻿using Chat.Core.Interfaces;
+﻿using Chat.Core.Entities;
+using Chat.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -21,18 +22,10 @@ namespace Chat.API.Controllers
         }
 
         // GET: api/<RakataController>
-        [HttpGet]
-        public async Task<string> Get()
+        [HttpPost]
+        public async Task<string> PostUserCommand([FromBody] UserCommand userCommand)
         {
-            /**
-             * Ignorar este controller y este GET 
-             */
-
-            var result = await _chatService.HandleUserCommand(new Core.Entities.UserCommand { 
-                Command="Add zacarracatelas to lista23",
-                Token="OK",
-                UserID = "1",
-            });
+            var result = await _chatService.HandleUserCommand(userCommand);
 
             return result;
         }        

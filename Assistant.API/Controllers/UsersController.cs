@@ -72,6 +72,27 @@ namespace Assistant.API.Controllers
 
         }
 
+        // GET api/<UsersController>/5
+        [HttpGet("{id}/grocery-lists", Name ="GetUsersGroceryLists")]
+        public ActionResult<IEnumerable<GroceryListDTO>> GetUsersGroceryLists(int id)
+        {
+            var service = _userService.GetUserGroceryLists(id);
+
+            if (service.ResponseCode == ResponseCode.Error)
+            {
+                return BadRequest(service.Error);
+            }
+
+            var groceryLists = service.Result;
+
+            return Ok(service.Result.Select(list => new GroceryListDTO { 
+                ID = list.ID,
+                Name = list.Name,
+                UserID = list.UserID
+            }));
+
+        }
+
         // POST api/<UsersController>
         [HttpPost]
         public ActionResult Post([FromBody] AddUser newUser)

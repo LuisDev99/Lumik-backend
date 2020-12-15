@@ -21,7 +21,7 @@ namespace Chat.Core.Interfaces
 
         Task<string> DeleteList(GroceryList groceryList);
 
-        Task<string> AddElementToList(GroceryItem newItem);
+        Task<string> AddElementToList(string groceryListName, GroceryItem newItem);
 
         Task<string> RemoveElementFromToList(GroceryItem groceryItem);
     }

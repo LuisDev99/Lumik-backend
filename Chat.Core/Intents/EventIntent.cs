@@ -23,9 +23,9 @@ namespace Chat.Core.Intents
             if(intentionData.Intent == ShoppingBot.Intent.CreateEvent)
             {
                 return await _assistantRepository.CreateEvent(new Event {
-                    Title = intentionData.Entities["Title"].ToString(),
+                    Title = intentionData.Entities[JsonEntitiesNameConstants.ACTIVITY_NAME].ToString(),
                     UserID = userIntention.UserID,
-                    TriggerDate = Convert.ToDateTime(intentionData.Entities["TriggerDate"].ToString())
+                    TriggerDate = Convert.ToDateTime(intentionData.Entities[JsonEntitiesNameConstants.DATETIME].ToString())
                 });
             }
 

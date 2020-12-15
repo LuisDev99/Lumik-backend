@@ -30,20 +30,21 @@ namespace Assistant.API.Controllers
         {
             var service = _groceryListService.Get();
 
-            if(service.ResponseCode == ResponseCode.Error)
+            if (service.ResponseCode == ResponseCode.Error)
             {
                 return BadRequest(service.Error);
             }
 
-            return Ok(service.Result.Select(groceryList => new GroceryListDTO { 
+            return Ok(service.Result.Select(groceryList => new GroceryListDTO
+            {
                 ID = groceryList.ID,
                 Name = groceryList.Name,
                 UserID = groceryList.UserID
-            }));            
-        }       
+            }));
+        }
 
         // GET api/<GroceryListsController>/5
-        [HttpGet("items", Name = "GetGroceryListByName")]
+        [HttpGet("query", Name = "GetGroceryListByName")]
         public ActionResult<GroceryListDTO> Get([FromQuery] string name)
         {
             var service = _groceryListService.GetGroceryListByName(name);
@@ -70,7 +71,51 @@ namespace Assistant.API.Controllers
                     Count = item.Count,
                     GroceryListID = item.GroceryListID,
                 })
-            }); 
+            });
+        }
+
+        // GET api/<GroceryListsController>/5
+        [HttpGet("{id}/items", Name = "GetGroceryListItems")]
+        public ActionResult<IEnumerable<GroceryItemDTO>> GetGroceryListItems(int id)
+        {
+            var service = _groceryListService.GetGroceryListItems(id);
+
+            if (service.ResponseCode == ResponseCode.Error)
+            {
+                return BadRequest(service.Error);
+            }
+
+            var groceryListItems = service.Result;
+
+            return Ok(groceryListItems.Select(item => new GroceryItemDTO
+            {
+                ID = item.ID,
+                Name = item.Name,
+                Count = item.Count,
+                GroceryListID = item.GroceryListID
+            }));
+        }
+
+        // GET api/<GroceryListsController>/5
+        [HttpGet("{id}/item", Name = "GetGroceryListItemByName")]
+        public ActionResult<GroceryItemDTO> GetGroceryListItemByName(int id, [FromQuery] string itemName)
+        {
+            var service = _groceryListService.GetGroceryListItemByName(id, itemName);
+
+            if (service.ResponseCode == ResponseCode.Error)
+            {
+                return BadRequest(service.Error);
+            }
+
+            var item = service.Result;
+
+            return Ok(new GroceryItemDTO
+            {
+                ID = item.ID,
+                Name = item.Name,
+                Count = item.Count,
+                GroceryListID = item.GroceryListID
+            });
         }
 
         // POST api/<GroceryListsController>
@@ -80,10 +125,10 @@ namespace Assistant.API.Controllers
             var service = _groceryListService.Insert(new GroceryList
             {
                 Name = value.Name,
-                UserID = value.UserID                
+                UserID = value.UserID
             });
 
-            if(service.ResponseCode == ResponseCode.Error)
+            if (service.ResponseCode == ResponseCode.Error)
             {
                 return BadRequest(service.Error);
             }
@@ -99,10 +144,10 @@ namespace Assistant.API.Controllers
             {
                 ID = id,
                 Name = value.Name,
-                UserID = value.UserID,                
+                UserID = value.UserID,
             });
 
-            if(service.ResponseCode == ResponseCode.Error)
+            if (service.ResponseCode == ResponseCode.Error)
             {
                 return BadRequest(service.Error);
             }
@@ -124,12 +169,12 @@ namespace Assistant.API.Controllers
                 ID = id,
             });
 
-            if(service.ResponseCode == ResponseCode.Error)
+            if (service.ResponseCode == ResponseCode.Error)
             {
                 return BadRequest(service.Error);
             }
 
-            if(service.ResponseCode == ResponseCode.NotFound)
+            if (service.ResponseCode == ResponseCode.NotFound)
             {
                 return NotFound(service.Error);
             }

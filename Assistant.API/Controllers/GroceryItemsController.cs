@@ -115,19 +115,15 @@ namespace Assistant.API.Controllers
         }
 
         // DELETE api/<GroceryItemsController>/5
-        [HttpDelete("{id}", Name = "DeleteGroceryItem")]
-        public ActionResult Delete(int id)
+        [HttpDelete(Name = "DeleteGroceryItem")]
+        public ActionResult Delete([FromBody] GroceryItemDTO groceryItem)
         {
-            var service = _groceryItemService.Delete(new GroceryItem { ID = id });
+            var service = _groceryItemService.Delete(
+                new GroceryItem { ID = groceryItem.ID, GroceryListID = groceryItem.GroceryListID });
 
             if (service.ResponseCode == ResponseCode.Error)
             {
                 return BadRequest(service.Error);
-            }
-
-            if (service.ResponseCode == ResponseCode.NotFound)
-            {
-                return NotFound(service.Error);
             }
 
             return Ok();

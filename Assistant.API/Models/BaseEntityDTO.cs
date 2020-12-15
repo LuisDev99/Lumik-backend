@@ -7,6 +7,6 @@ namespace Assistant.API.Models
 {
     public class BaseEntityDTO
     {
-        public int ID;
+        public int ID { get; set; }
     }
 }
