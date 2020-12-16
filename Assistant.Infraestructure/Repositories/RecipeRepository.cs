@@ -1,5 +1,7 @@
 ﻿using Assistant.Core.Entities;
 using Assistant.Core.Interfaces.Repositories;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,24 +15,27 @@ namespace Assistant.Infraestructure.Repositories
 
         public IEnumerable<Recipe> FindRecipesByIngredients(IEnumerable<GroceryItem> groceryListItems)
         {
-            // Retrieve all recipes [Massive hack]
-            var recipes = _dbContext.Recipes.AsEnumerable()
-                .Where(i => i.Ingredients
-                    .Where(ing =>
+            // Retrieve ALL recipes from the db (Horrible)
+            var recipes = _dbContext.Recipes.Include(recipe => recipe.Ingredients).ToList();
+
+            // Retrieve all recipes that matches any groceryListItem Name [Massive hack]
+            var filteredRecipes = recipes
+                .Where(recipe => recipe.Ingredients
+                    .Where(ingredient =>
                     {
                         foreach (var item in groceryListItems)
                         {
-                            if (ing.Name.ToLower().Contains(item.Name.ToLower()))
+                            if (ingredient.Name.ToLower().Contains(item.Name.ToLower()))
                             {
                                 return true;
-                            } 
+                            }
                         }
 
                         return false;
-                    }).Any());
+                    }).ToList().Any()).ToList().Take(5);
 
 
-            return recipes;
+            return filteredRecipes;
         }
     }
 }
