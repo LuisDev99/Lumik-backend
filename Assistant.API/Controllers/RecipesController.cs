@@ -26,9 +26,9 @@ namespace Assistant.API.Controllers
 
         // GET: api/<RecipesController>
         [HttpGet]
-        public ActionResult<IEnumerable<RecipeDTO>> Get()
+        public ActionResult<IEnumerable<RecipeDTO>> Get([FromQuery] string groceryListName)
         {
-            var service = _recipeService.Get();
+            var service = _recipeService.GetRecommendedRecipesForGroceryList(groceryListName);
 
             if (service.ResponseCode == ResponseCode.Error)
             {

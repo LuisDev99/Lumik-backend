@@ -7,6 +7,6 @@ namespace Assistant.Core.Interfaces
 {
     public interface IRecipeService : IBaseService<Recipe>
     {
-        
+        ServiceResult<IEnumerable<Recipe>> GetRecommendedRecipesForGroceryList(string groceryListName);
     }
 }

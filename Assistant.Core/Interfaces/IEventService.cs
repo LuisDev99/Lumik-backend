@@ -6,7 +6,6 @@ using System.Text;
 namespace Assistant.Core.Interfaces
 {
     public interface IEventService : IBaseService<Event>
-    {
-        
+    {        
     }
 }

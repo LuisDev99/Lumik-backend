@@ -46,6 +46,7 @@ namespace Assistant.API
             services.AddScoped<IGroceryListService, GroceryListService>();
             services.AddScoped<IGroceryItemService, GroceryItemService>();
             services.AddScoped<IIngredientService, IngredientService>();
+            services.AddScoped<IRecipeRepository, RecipeRepository>();
             services.AddScoped<IRecipeService, RecipeService>();
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IUserService, UserService>();
