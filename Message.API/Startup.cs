@@ -1,8 +1,9 @@
 using Chat.API;
 using Chat.API.Hubs;
-
+using Chat.API.Middlewares;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -59,6 +60,8 @@ namespace Message.API
 
             app.UseCors(x => x.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin());
 
+            app.UseWhen(IsVerifyRequestNeeded, applicationBuilder => applicationBuilder.UseMiddleware<AuthMiddleware>());
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
@@ -66,6 +69,11 @@ namespace Message.API
             });
 
             app.UseCors(x => x.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin());
+        }
+
+        private bool IsVerifyRequestNeeded(HttpContext context)
+        {
+            return context.Request.Path.StartsWithSegments("/api");
         }
     }
 }

@@ -20,6 +20,13 @@ namespace Assistant.Core.Services
             _baseGroceryListRepository = baseGroceryListRepository;
         }
 
+        public ServiceResult<User> GetUserByEmail(string email)
+        {
+            var user = _userRepository.GetByCondition(user => user.Email.ToLower() == email.ToLower());
+
+            return ServiceResult<User>.SuccessResult(user);
+        }
+
         public ServiceResult<IEnumerable<GroceryList>> GetUserGroceryLists(int userID)
         {
             var groceryLists = _baseGroceryListRepository.Filter(list => list.UserID == userID);
@@ -29,12 +36,12 @@ namespace Assistant.Core.Services
 
         public override ServiceResult<User> Insert(User userInfo)
         {
-            // Validate if user's username is unique (Is this efficient?)
-             var results = _userRepository.Filter(user => user.UserName == userInfo.UserName);
+            // Validate if user's email is unique
+             var results = _userRepository.Filter(user => user.Email == userInfo.Email);
 
             if(results.ToList().Count > 0)
             {
-                return ServiceResult<User>.PetitionDenied($"Usuario {userInfo.UserName} ya existe");
+                return ServiceResult<User>.PetitionDenied($"User {userInfo.UserName} already exists");
             }
 
             return base.Insert(userInfo);

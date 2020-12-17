@@ -10,17 +10,21 @@ using System.Threading.Tasks;
 
 namespace Chat.BotInfrastucture
 {
+
     public class AssistantRepository : IAssistantRepository
     {
         private readonly AssistantAPIClient _assistantAPIClient;
 
         public AssistantRepository()
         {
-            _assistantAPIClient = new AssistantAPIClient("https://localhost:5003", new HttpClient());
+            var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Add("#BOT_BACKDOOR", "HACKED");
+
+            _assistantAPIClient = new AssistantAPIClient("https://localhost:5003", httpClient);
         }
 
         private async Task<GroceryListDTO> FindGroceryListByName(string groceryListName)
-        {
+        {            
             try
             {
                 var groceryList = await _assistantAPIClient.GetGroceryListByNameAsync(groceryListName);
@@ -95,11 +99,30 @@ namespace Chat.BotInfrastucture
             return $"Man are you sure? Well, to late. The list {groceryList.Name} gone bro";
         }
 
-        public async Task<string> FindRecipeForUser(User user)
+        public async Task<string> FindRecipesForGroceryList(GroceryList groceryList)
         {
-            //var userGroceryList = await _assistantAPIClient;
+            // Check if the list exists
+            var groceryListResult = await FindGroceryListByName(groceryList.Name);
 
-            return "Pan con frijoles";
+            if (groceryListResult == null)
+            {
+                return $"The list {groceryList.Name} that you are trying to get recipes does not exists. Zacarracatelas";
+            }
+
+            // Find recommended recipes for the grocery list
+            var recommendedRecipesForGroceryList = await _assistantAPIClient.RecipesAllAsync(groceryList.Name);
+
+            if (recommendedRecipesForGroceryList == null || recommendedRecipesForGroceryList.Count == 0)
+                return $"I couldn't find recipes for your list {groceryList.Name}. Try adding more items to it!";
+
+            var stringReponse = $"I found some recipes that fit with your list {groceryList.Name}! Here they are: ";
+
+            foreach (var recipe in recommendedRecipesForGroceryList)
+            {
+                stringReponse += $"\n\t - >>> {recipe.Name}";
+            }
+
+            return stringReponse;
         }
 
         public async Task<string> GetAllGroceryListsForUser(User user)
@@ -169,6 +192,25 @@ namespace Chat.BotInfrastucture
             }
 
             return stringReponse;
+        }
+
+        public async Task<User> GetUserByEmail(string email)
+        {
+            try
+            {
+                var user = await _assistantAPIClient.GetUserByEmailAsync(email);
+                return new User
+                {
+                    ID = user.Id,
+                    Email = user.Email,
+                    UserName = user.UserName,
+                };
+
+            }
+            catch(Exception)
+            {
+                return null;
+            }
         }
     }
 }

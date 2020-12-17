@@ -7,6 +7,8 @@ namespace Assistant.Core.Interfaces
 {
     public interface IUserService : IBaseService<User>
     {
+        ServiceResult<User> GetUserByEmail(string email);
+
         ServiceResult<IEnumerable<GroceryList>> GetUserGroceryLists(int userID);
     }
 }

@@ -18,6 +18,7 @@ using Microsoft.Azure.CognitiveServices.Language.LUIS.Runtime;
 using Microsoft.Azure.CognitiveServices.Language.LUIS.Runtime.Models;
 using Microsoft.Azure.CognitiveServices.Language.LUIS.Authoring.Models;
 using Chat.Core.Handler;
+using Chat.API.Middlewares;
 
 namespace Chat.API
 {
@@ -26,6 +27,8 @@ namespace Chat.API
         public static IServiceCollection AddChatServices(this IServiceCollection services)
         {
             services.AddSingleton(GetLuisServiceInstance());
+
+            services.AddScoped<AuthMiddleware>();
             services.AddScoped<IChatService, ChatService>();
             services.AddScoped<IIntentHandler, IntentHandler>();            
             services.AddScoped<IBotRepository, BotRepository>();

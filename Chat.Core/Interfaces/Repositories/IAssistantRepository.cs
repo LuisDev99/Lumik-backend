@@ -9,7 +9,7 @@ namespace Chat.Core.Interfaces
 {
     public interface IAssistantRepository
     {
-        Task<string> FindRecipeForUser(User user);
+        Task<User> GetUserByEmail(string email);
 
         Task<string> CreateEvent(Event newEvent);
 
@@ -20,6 +20,8 @@ namespace Chat.Core.Interfaces
         Task<string> CreateList(GroceryList newList);
 
         Task<string> DeleteList(GroceryList groceryList);
+
+        Task<string> FindRecipesForGroceryList(GroceryList groceryList);
 
         Task<string> AddElementToList(string groceryListName, GroceryItem newItem);
 

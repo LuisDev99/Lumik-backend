@@ -19,9 +19,7 @@ namespace Assistant.Infraestructure.Configurations
 
             builder.HasMany(x => x.ScheduledEvents).WithOne(x => x.User).HasForeignKey(x => x.UserID);
 
-            builder.Property(x => x.Name).IsRequired();
-
-            builder.Property(x => x.Password).IsRequired();
+            builder.Property(x => x.Email).IsRequired();
 
             builder.Property(x => x.UserName).IsRequired();
         }

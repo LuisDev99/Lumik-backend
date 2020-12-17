@@ -29,6 +29,9 @@ namespace Chat.Core.Handler
                 case Intent.CreateEvent:
                     return await new EventIntent(_assistantRepository).Act(userIntent);
 
+                case Intent.FindRecipes:
+                    return await new RecipeIntent(_assistantRepository).Act(userIntent);
+
                 /* All grocery list related intents */
                 case Intent.ShowList:
                 case Intent.DeleteList:

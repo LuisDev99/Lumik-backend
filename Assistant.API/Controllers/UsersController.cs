@@ -26,54 +26,33 @@ namespace Assistant.API.Controllers
             _userService = userService;
         }
 
-        // GET: api/<UsersController>
-        [HttpGet]
-        public ActionResult<IEnumerable<UserDTO>> Get()
-        {
-            var service = _userService.Get();                        
-
-            if(service.ResponseCode == ResponseCode.Error)
-            {
-                return BadRequest(service.Error);
-            }
-
-            return Ok(service.Result.Select(user => new UserDTO
-            {
-                ID = user.ID,
-                Name = user.Name,
-                Password = user.Password,
-                UserName = user.UserName
-            }));
-        }
-
         // GET api/<UsersController>/5
-        [HttpGet("{id}")]
-        public ActionResult<UserDTO> Get(int id)
+        [HttpGet(Name = "GetUserByEmail")]
+        public ActionResult<UserDTO> Get([FromQuery] string email)
         {
-            var service = _userService.GetByID(id);
+            var service = _userService.GetUserByEmail(email);
 
             if (service.ResponseCode == ResponseCode.Error)
             {
                 return BadRequest(service.Error);
             }
 
-            if (service.ResponseCode == ResponseCode.NotFound)
+            if(service.Result == null)
             {
-                return NotFound(service.Error);
+                return Ok(service.Result);
             }
 
             return Ok(new UserDTO
             {
                 ID = service.Result.ID,
-                Name = service.Result.Name,
-                Password = service.Result.Password,
+                Email = service.Result.Email,
                 UserName = service.Result.UserName
             });
 
         }
 
         // GET api/<UsersController>/5
-        [HttpGet("{id}/grocery-lists", Name ="GetUsersGroceryLists")]
+        [HttpGet("{id}/grocery-lists", Name = "GetUsersGroceryLists")]
         public ActionResult<IEnumerable<GroceryListDTO>> GetUsersGroceryLists(int id)
         {
             var service = _userService.GetUserGroceryLists(id);
@@ -98,8 +77,7 @@ namespace Assistant.API.Controllers
         public ActionResult Post([FromBody] AddUser newUser)
         {
             var service = _userService.Insert(new User { 
-                Name = newUser.Name,
-                Password = newUser.Password,
+                Email = newUser.Email,
                 UserName = newUser.UserName
             });
 
@@ -123,8 +101,7 @@ namespace Assistant.API.Controllers
             var service = _userService.Update(new User
             {
                 ID = id,
-                Name = newInfo.Name,
-                Password = newInfo.Password,
+                Email = newInfo.Email,
                 UserName = newInfo.UserName
             });
 

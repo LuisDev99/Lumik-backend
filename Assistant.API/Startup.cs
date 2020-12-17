@@ -20,6 +20,7 @@ using Assistant.Core.Services;
 using Assistant.Core.Entities;
 using Microsoft.OpenApi.Models;
 using Assistant.Core.Interfaces.Repositories;
+using Chat.API.Middlewares;
 
 namespace Assistant.API
 {
@@ -50,6 +51,7 @@ namespace Assistant.API
             services.AddScoped<IRecipeService, RecipeService>();
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<AuthMiddleware>();
 
             services.AddSwaggerGen(c =>
             {
@@ -73,10 +75,21 @@ namespace Assistant.API
 
             app.UseAuthorization();
 
+            app.UseWhen(IsVerifyRequestNeeded, applicationBuilder => applicationBuilder.UseMiddleware<AuthMiddleware>());
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private bool IsVerifyRequestNeeded(HttpContext context)
+        {
+            // This route should be public
+            var isGetUserByEmailRoute = context.Request.Path.StartsWithSegments("/api/users")
+                                            && context.Request.Method == "GET";
+
+            return !isGetUserByEmailRoute && context.Request.Path.StartsWithSegments("/api");
         }
     }
 }
