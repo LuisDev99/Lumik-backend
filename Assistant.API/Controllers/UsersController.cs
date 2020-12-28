@@ -39,7 +39,7 @@ namespace Assistant.API.Controllers
 
             if(service.Result == null)
             {
-                return Ok(service.Result);
+                return Ok();
             }
 
             return Ok(new UserDTO

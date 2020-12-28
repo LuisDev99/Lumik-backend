@@ -77,6 +77,8 @@ namespace Assistant.API
 
             app.UseWhen(IsVerifyRequestNeeded, applicationBuilder => applicationBuilder.UseMiddleware<AuthMiddleware>());
 
+	    app.UseCors(x => x.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin());
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
@@ -86,8 +88,7 @@ namespace Assistant.API
         private bool IsVerifyRequestNeeded(HttpContext context)
         {
             // This route should be public
-            var isGetUserByEmailRoute = context.Request.Path.StartsWithSegments("/api/users")
-                                            && context.Request.Method == "GET";
+            var isGetUserByEmailRoute = context.Request.Path.StartsWithSegments("/api/users");
 
             return !isGetUserByEmailRoute && context.Request.Path.StartsWithSegments("/api");
         }
